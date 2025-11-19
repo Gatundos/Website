@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Herói Hospitalizado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --text: #e5e7eb;
+      --accent: #22c55e;
+      --muted: #94a3b8;
+      --disabled: #6b7280;
+      /* Duração da ampulheta; será ajustada via JS para X*20s */
+      --time: 10s;
+      --sand: #e2ca76;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100svh; background: radial-gradient(1200px 800px at 50% 20%, #1f2937 0%, var(--bg) 60%);
+      color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      display: grid; place-items: center; padding: 24px;
+    }
+    .card {
+      width: 100%; max-width: 680px; background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; backdrop-filter: blur(6px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    h1 { margin: 0 0 6px 0; font-size: 1.4rem; letter-spacing: 0.3px; text-align: center; }
+    p.subtitle { margin: 0 0 16px 0; color: var(--muted); font-size: 0.95rem; text-align: center; }
+
+    .image-wrap { width: 100%; display: grid; place-items: center; margin: 8px 0 16px 0; }
+    .image-wrap img {
+      width: 220px; height: 220px; object-fit: cover; border-radius: 12px; display: block; margin-left: auto; margin-right: auto;
+      border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    }
+
+    .actions { display: flex; gap: 12px; justify-content: center; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+    button {
+      appearance: none; border: 0; border-radius: 10px; padding: 12px 18px;
+      background: linear-gradient(180deg, #22c55e, #16a34a); color: #041308; font-weight: 700; letter-spacing: 0.2px;
+      cursor: pointer; transition: transform 0.06s ease, filter 0.15s ease;
+    }
+    button:hover { filter: brightness(1.05); }
+    button:active { transform: translateY(1px) scale(0.99); }
+    button[disabled] { filter: grayscale(0.5) brightness(0.8); cursor: not-allowed; }
+
+    .result { margin-top: 14px; text-align: center; font-size: 1.05rem; min-height: 1.2em; }
+    .muted { color: var(--muted); font-size: 0.9rem; text-align: center; margin-top: 6px; }
+
+    /* Menu Personagens */
+    nav#menuPersonagens {
+      margin-top: 20px; display: none;
+      border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;
+    }
+    nav#menuPersonagens ul { list-style: none; padding: 0; margin: 0; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    nav#menuPersonagens a {
+      color: #cbd5e1; text-decoration: none; background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    nav#menuPersonagens a:hover { background: rgba(255,255,255,0.10); }
+    nav.locked { opacity: 0.6; }
+    nav.locked a { pointer-events: none; color: var(--disabled); }
+
+    /* Contador */
+    .timer {
+      margin-top: 10px; text-align: center; font-variant-numeric: tabular-nums; color: var(--muted);
+    }
+    .success { color: var(--accent); text-align: center; margin-top: 8px; }
+
+    /* Ampulheta */
+    .hourglass-wrap {
+      display: none; /* exibida durante a contagem */
+      margin-top: 12px;
+      display: grid; place-items: center;
+    }
+    .hourglass {
+      width: 120px; /* ajuste de tamanho */
+      height: 220px;
+      position: relative;
+      filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
+    }
+    /* Moldura superior/inferior */
+    .hg-top, .hg-bottom {
+      width: 120px;
+      height: 100px;
+      position: relative;
+      overflow: hidden;
+      background-color: rgba(255,255,255,0.12);
+      box-shadow: inset 0 0 16px rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.25);
+    }
+    .hg-top { border-radius: 0 0 60px 60px; }
+    .hg-bottom { border-radius: 60px 60px 0 0; }
+    .hg-neck {
+      position: relative;
+      height: 20px;
+      width: 2px;
+      background: rgba(255,255,255,0.35);
+      margin: 0 auto;
+    }
+    /* Areia superior/inf. (formas circulares que se movem) */
+    .hg-top::before, .hg-bottom::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0;
+      width: 120px; height: 100px;
+      background: var(--sand);
+      border-radius: 50%;
+      transform: translateY(50%);
+    }
+    .hg-bottom::before { transform: translateY(100%); }
+
+    /* Fio de areia no gargalo */
+    .hg-top::after, .hg-bottom::after {
+      content: "";
+      position: absolute;
+      left: 55px; width: 10px;
+      background: var(--sand);
+    }
+    .hg-top::after {
+      top: 0; height: 100%;
+      transform: translateY(100%);
+    }
+    .hg-bottom::after {
+      top: 0; height: 100%;
+      transform: translateY(-100%);
+    }
+
+    /* Animações sincronizadas com --time */
+    .running .hg-top::before { animation: hg-top var(--time) linear forwards; }
+    .running .hg-bottom::before { animation: hg-bottom var(--time) linear forwards; }
+    .running .hg-top::after { animation: hg-top-drip var(--time) linear forwards; }
+    .running .hg-bottom::after { animation: hg-bottom-drip var(--time) linear forwards; }
+
+    @keyframes hg-top {
+      0% { transform: translateY(50%); }
+      100% { transform: translateY(150%); } /* esvazia o topo */
+    }
+    @keyframes hg-bottom {
+      0% { transform: translateY(100%); }
+      100% { transform: translateY(0%); }  /* enche o fundo */
+    }
+    @keyframes hg-top-drip {
+      0% { transform: translateY(100%); }
+      100% { transform: translateY(0%); }
+    }
+    @keyframes hg-bottom-drip {
+      0% { transform: translateY(-100%); left: 55px; width: 10px; }
+      100% { transform: translateY(0%); left: 60px; width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <main class="card" role="main" aria-labelledby="title">
+    <h1 id="title">Quanto tempo seu herói precisa ficar hospitalizado?</h1>
+    <p class="subtitle">Clique para sortear um número de 1 a 10; 1 turno = 20 segundos</p>
+
+    <div class="image-wrap" aria-hidden="false">
+      <img src="Imagem\Hospital.png?q=80&w=600&auto=format&fit=crop" alt="Emblema de herói" />
+    </div>
+
+    <div class="actions">
+      <button id="btnSortear" type="button" aria-describedby="resultado">Sortear Turnos</button>
+      <button id="btnLimpar" type="button">Limpar</button>
+    </div>
+
+    <div id="resultado" class="result" aria-live="polite"></div>
+
+    <!-- Ampulheta + contador digital -->
+    <div class="hourglass-wrap" id="hgWrap" aria-hidden="true">
+      <div class="hourglass" id="hourglass">
+        <div class="hg-top"></div>
+        <div class="hg-neck"></div>
+        <div class="hg-bottom"></div>
+      </div>
+    </div>
+
+    <div id="contador" class="timer" aria-live="polite"></div>
+    <div id="mensagem" class="success" aria-live="polite"></div>
+    <p class="muted"><M1>O menu será liberado quando a contagem encerrar.</M1></p>
+
+    <!-- Menu Personagens -->
+    <nav id="menuPersonagens" class="locked" aria-label="Menu Personagens" aria-disabled="true">
+           <ul id="listaPersonagens"></ul>
+     <ul>
+    <li><a href="Fubá.html" data-url="fragments/Fubá.html">Fubá</a></li>
+    <li><a href="/personagens/p2" data-url="fragments/p2.html">Personagem 2</a></li>
+    <li><a href="/personagens/p3" data-url="fragments/p3.html">Personagem 3</a></li>
+  </ul>
+    </nav>
+    <section id="conteudo" aria-live="polite"></section>
+   
+  </main>
+
+  <script>
+   function inteiroAleatorio(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  const btnSortear = document.getElementById('btnSortear');
+  const btnLimpar  = document.getElementById('btnLimpar');
+  const resultado  = document.getElementById('resultado');
+  const contadorEl = document.getElementById('contador');
+  const mensagemEl = document.getElementById('mensagem');
+  const menu       = document.getElementById('menuPersonagens');
+  const hgWrap     = document.getElementById('hgWrap');
+  const hourglass  = document.getElementById('hourglass');
+
+  let intervaloId = null;
+  let restante = 0;
+
+  function formatarTempo(segundos) {
+    const m = Math.floor(segundos / 60);
+    const s = segundos % 60;
+    const mm = String(m).padStart(2, '0');
+    const ss = String(s).padStart(2, '0');
+    return `${mm}:${ss}`;
+  }
+
+  function impedir(e) { e.preventDefault(); }
+  function limparIntervalo() {
+    if (intervaloId !== null) { clearInterval(intervaloId); intervaloId = null; }
+  }
+
+  function bloquearMenu() {
+    menu.classList.add('locked');
+    menu.setAttribute('aria-disabled', 'true');
+    menu.querySelectorAll('a').forEach(a => {
+      a.setAttribute('tabindex', '-1');
+      a.setAttribute('aria-disabled', 'true');
+      a.addEventListener('click', impedir);
+    });
+    menu.style.display = 'none';
+  }
+
+  function liberarMenu() {
+    menu.classList.remove('locked');
+    menu.setAttribute('aria-disabled', 'false');
+    menu.querySelectorAll('a').forEach(a => {
+      a.removeAttribute('tabindex');
+      a.setAttribute('aria-disabled', 'false');
+      a.removeEventListener('click', impedir);
+    });
+    menu.style.display = 'block';
+  }
+
+  function atualizarAmpulhetaDuracao(segundos) {
+    document.documentElement.style.setProperty('--time', `${segundos}s`);
+  }
+
+  function mostrarAmpulheta() {
+    hgWrap.style.display = 'grid';
+    hgWrap.setAttribute('aria-hidden', 'false');
+    hourglass.classList.add('running');
+    void hourglass.offsetWidth; // reinicia animação
+  }
+
+  function ocultarAmpulheta() {
+    hourglass.classList.remove('running');
+    hgWrap.style.display = 'none';
+    hgWrap.setAttribute('aria-hidden', 'true');
+  }
+
+  function iniciarContagem(turnos) {
+    restante = turnos * 20;
+    contadorEl.textContent = `Contagem: ${turnos} turnos (${formatarTempo(restante)})`;
+    mensagemEl.textContent = '';
+    menu.style.display = 'block';
+    bloquearMenu();
+
+    btnSortear.disabled = true;
+
+    atualizarAmpulhetaDuracao(restante);
+    mostrarAmpulheta();
+
+    limparIntervalo();
+    intervaloId = setInterval(() => {
+      restante--;
+      contadorEl.textContent = `Tempo restante: ${formatarTempo(restante)}`;
+      if (restante <= 0) {
+        limparIntervalo();
+        contadorEl.textContent = 'Contagem encerrada';
+        mensagemEl.textContent = 'Menu Personagens liberado!';
+        ocultarAmpulheta();
+        liberarMenu();
+        btnSortear.disabled = false;
+      }
+    }, 1000);
+  }
+
+  btnSortear.addEventListener('click', () => {
+    const x = inteiroAleatorio(1, 10);
+    resultado.textContent = `Seu herói ficará hospitalizado por ${x} turnos`;
+    iniciarContagem(x);
+  });
+
+  btnLimpar.addEventListener('click', () => {
+    resultado.textContent = '';
+    contadorEl.textContent = '';
+    mensagemEl.textContent = '';
+    limparIntervalo();
+    bloquearMenu();
+    ocultarAmpulheta();
+    btnSortear.disabled = false;
+  });
+
+  // ====== Leitura do menu a partir de menu.json + SPA ======
+  const ARQ_MENU = 'menu.json'; // arquivo de referência na raiz
+  let rotas = {};               // mapa rota -> path do arquivo HTML
+  const listaUL = document.getElementById('listaPersonagens');
+  const conteudo = document.getElementById('conteudo');
+
+  async function carregarMenu() {
+    const resp = await fetch(ARQ_MENU, { cache: 'no-store' });
+    const data = await resp.json(); // { personagens: [...] }
+
+    // Monta o menu dinamicamente
+    listaUL.innerHTML = data.personagens.map(item => {
+      const rota = item.rota || `/${item.path.replace('.html','')}`;
+      rotas[rota] = item.path;
+      return `<li><a href="${rota}" data-url="${item.path}">${item.titulo}</a></li>`;
+    }).join('');
+
+    // Intercepta cliques para não recarregar a página
+    document.querySelectorAll('#menuPersonagens a').forEach(a => {
+      a.addEventListener('click', e => {
+        // Se o menu ainda estiver bloqueado, ignora
+        if (menu.classList.contains('locked')) return;
+        e.preventDefault();
+        navegar(a.getAttribute('href'));
+      });
+    });
+  }
+
+  async function render(pathname) {
+    const path = rotas[pathname] || rotas[Object.keys(rotas)[0]];
+    if (!path) return;
+    const html = await (await fetch(path, { cache: 'no-store' })).text();
+    conteudo.innerHTML = html;
+  }
+
+  function navegar(rota) {
+    history.pushState({ rota }, '', rota);
+    render(rota);
+  }
+
+  window.addEventListener('popstate', () => render(location.pathname));
+
+  // Inicialização
+  document.addEventListener('DOMContentLoaded', async () => {
+    await carregarMenu(); // lê menu.json e cria os links
+    // Carrega a rota atual (permite bookmark/refresh direto em um personagem)
+    await render(location.pathname);
+  });
+</script>
+</body>
