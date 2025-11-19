@@ -98,14 +98,30 @@
       padding: 20px;
       overflow: hidden;
     }
+    .frame-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin: 0 0 8px;
+    }
+    .btn {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #1b2130;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .btn:hover { background: #232b3d; }
+
     .frame-wrap {
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 12px;
-      height: calc(100dvh - 20px - 12px - 16px - 20px);
+      height: calc(100dvh - 20px - 12px - 16px - 20px - 36px);
       min-height: 400px;
       overflow: hidden;
-      position: relative; /* necessário para posicionar o botão fechar */
+      position: relative; /* posiciona o botão fechar dentro do contêiner */
     }
     iframe#viewer {
       border: none;
@@ -114,7 +130,7 @@
       display: block;
     }
 
-    /* Botão fechar (visível somente em fullscreen via :fullscreen) */
+    /* Botão fechar (apenas no fullscreen via :fullscreen) */
     #btnCloseFull {
       position: absolute;
       top: 12px;
@@ -174,6 +190,7 @@
         <li><a href="../Menu/hospital.html" data-src="../Menu/hospital.html">Hospital</a></li>
         <li><a href="#paginas/mercado.html" data-src="paginas/mercado.html">Mercado</a></li>
         <li><a href="#paginas/config.html" data-src="paginas/config.html">Configurações</a></li>
+        <li><a href="#paginas/Perfil" data-src="paginas/config.html">Perfil</a></li>
       </ul>
     </nav>
   </aside>
@@ -185,6 +202,10 @@
   </header>
 
   <main>
+    <div class="frame-bar">
+      <button class="btn" id="btnEnterFull" aria-label="Entrar em tela cheia">Fullscreen</button>
+    </div>
+
     <div class="frame-wrap" id="frameWrap">
       <button id="btnCloseFull" aria-label="Fechar tela cheia">Fechar ✕</button>
       <iframe
@@ -203,6 +224,7 @@
     const iframe = document.getElementById('viewer');
     const links = Array.from(document.querySelectorAll('nav a[data-src]'));
     const frameWrap = document.getElementById('frameWrap');
+    const btnEnterFull = document.getElementById('btnEnterFull');
     const btnClose = document.getElementById('btnCloseFull');
 
     function setActiveBySrc(src) {
@@ -235,13 +257,17 @@
       }
     }
 
-    // Clique no menu: trocar a página e entrar em fullscreen (gesto do usuário)
+    // Clique no menu: APENAS navega no iframe (sem fullscreen automático)
     links.forEach(a => {
-      a.addEventListener('click', async (ev) => {
+      a.addEventListener('click', (ev) => {
         ev.preventDefault();
         navigateTo(a.dataset.src, true);
-        await enterFullscreen();
       });
+    });
+
+    // Botão para entrar em fullscreen
+    btnEnterFull.addEventListener('click', () => {
+      enterFullscreen();
     });
 
     // Botão "Fechar": sai do fullscreen
@@ -249,15 +275,15 @@
       exitFullscreen();
     });
 
-    // Sincroniza UI ao entrar/sair do fullscreen (opcionalmente adicione lógica extra aqui)
+    // Opcional: sincroniza UI ao entrar/sair do fullscreen
     document.addEventListener('fullscreenchange', () => {
       const inFull = !!document.fullscreenElement;
-      // O botão é controlado por CSS :fullscreen; aside/header são ocultos por CSS também.
-      // Este handler existe para possíveis integrações futuras.
-      console.log('Fullscreen:', inFull ? 'ativo' : 'inativo');
+      // O CSS via :fullscreen cuida do botão Fechar e de esconder sidebar/header.
+      // Poderia, por exemplo, alternar o texto do botão principal:
+      btnEnterFull.textContent = inFull ? 'Fullscreen' : 'Fullscreen';
     });
 
-    // Restaura a partir do hash (não solicita fullscreen aqui para evitar bloqueio)
+    // Restaura a partir do hash
     function initFromHash() {
       const src = location.hash ? location.hash.slice(1) : 'Menu/Cla.html';
       navigateTo(src, false);

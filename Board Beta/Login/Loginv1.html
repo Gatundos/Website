@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Login com Menu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root { --primary:#2563eb; --bg:#0f172a; --card:#111827; --text:#e5e7eb; --muted:#94a3b8; }
+    body { margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial; background:linear-gradient(120deg,#0b1020,#0f172a); color:var(--text); min-height:100vh; display:grid; place-items:center; }
+    .card { width:100%; max-width:420px; background:var(--card); border:1px solid #1f2937; border-radius:14px; padding:28px; box-shadow:0 10px 35px rgba(0,0,0,.35); }
+    h1 { margin:0 0 8px; font-size:1.5rem; }
+    p { margin:0 0 18px; color:var(--muted); }
+    .field { margin-bottom:14px; }
+    label { display:block; font-size:.9rem; margin-bottom:6px; color:#cbd5e1; }
+    input { width:100%; padding:12px 14px; border-radius:10px; border:1px solid #334155; background:#0b1220; color:var(--text); outline:none; }
+    input:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(37,99,235,.2); }
+    .error { color:#fca5a5; font-size:.85rem; min-height:18px; margin-top:4px; }
+    .btn { width:100%; padding:12px 16px; border:0; border-radius:10px; background:var(--primary); color:white; font-weight:600; cursor:pointer; }
+    .btn:disabled { opacity:.6; cursor:not-allowed; }
+    .menu { display:flex; gap:10px; flex-wrap:wrap; }
+    .menu a { text-decoration:none; color:white; background:#1d4ed8; padding:10px 14px; border-radius:10px; border:1px solid #3b82f6; }
+    .hidden { display:none !important; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+    .logout { background:#334155; border:1px solid #475569; padding:8px 12px; border-radius:8px; color:#e2e8f0; cursor:pointer; }
+    .info { font-size:.9rem; color:#a5b4fc; margin-bottom:12px; }
+  </style>
+  <style>
+body {
+  background-image: url("../images/Sistema Login.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+</style>
+</head>
+
+<body>
+     <section id="Logo" class=".card max-width: 520px; width: 100%; margin: 0 auto;">
+      <div class="image-wrap" aria-hidden="false"> <img src="/images/main-banner1.jpg" alt="Gatundo RPG & Board Game" class="img-10" /> </div>
+     </section>
+
+  <!-- Login -->
+  <section id="login-view" class="card"> 
+    <h1>Entrar</h1>
+    <p>Use seu e-mail e senha para acessar o Beta Test.</p>
+    <form id="login-form" novalidate>
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input id="email" name="email" type="email" autocomplete="username" placeholder="voce@exemplo.com" required />
+        <div id="email-error" class="error"></div>
+      </div>
+      <div class="field">
+  <label for="key">Chave</label>
+  <input id="key" name="key" type="text" placeholder="Sua chave alfanumérica" required minlength="4" />
+  <div id="key-error" class="error"></div>
+  <div class="field">
+  <label for="users-file">Arquivo de Chave (Licença.txt)</label>
+  <input id="users-file" type="file" accept="application/json,.json" />
+  <div class="error" id="file-error"></div>
+</div>
+
+</div>
+      <div class="field">
+        <label for="password">Senha</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Sua senha" required minlength="6" />
+        <div id="password-error" class="error"></div>
+      </div>
+      <button id="login-btn" class="btn" type="submit">Acessar</button>
+      <div id="form-error" class="error" style="text-align:center; margin-top:10px;"></div>
+    </form>
+  </section>
+
+  <!-- Menu liberado -->
+  <section id="menu-view" class="card hidden">
+    <div class="topbar">
+      <div>
+        <h1>Menu</h1>
+        <div class="info">Acesso concedido. Selecione uma opção.</div>
+      </div>
+      <button id="logout-btn" class="logout" type="button">Sair</button>
+    </div>
+    <nav class="menu">
+      <a href="../Menu/Menu.html">Entre e seja Bem Vindo</a>
+      <!--<a href="#Personagens">Personagens</a>
+      <a href="#Hospital">Hospital</a>
+      <a href="#Mercado">Mercado</a>
+      <a href="#config">Configurações</a> -->
+    </nav>
+  </section>
+
+  
+  <script>
+// users.js
+// Cadastrar as pessoas no site
+window.USERS_CACHE = [
+  { email: "Fuba@fuba.com", password: "admin123", chave: "A1B2C3D4" },
+  { email: "Bigodinho@fuba.com",  password: "user1234", chave: "X9Y8Z7K6" }
+];
+
+ 
+  // 1) Fonte A: users.js define window.USERS_CACHE (opcional)
+  // 2) Fonte B: input file lê users.json e popula USERS_CACHE_LOCAL
+
+  let USERS_CACHE_LOCAL = null; // dados carregados via FileReader (users.json)
+
+  // Leitura do users.json via FileReader
+  const fileInput = document.getElementById("users-file");
+  const fileErr   = document.getElementById("file-error");
+  if (fileInput) {
+    fileInput.addEventListener("change", (e) => {
+      fileErr.textContent = "";
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onerror = () => fileErr.textContent = "Falha ao ler o arquivo.";
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          if (!Array.isArray(data)) {
+            fileErr.textContent = "JSON inválido: esperado um array de usuários.";
+            return;
+          }
+          USERS_CACHE_LOCAL = data;
+        } catch (err) {
+          console.error(err);
+          fileErr.textContent = "JSON inválido.";
+        }
+      };
+      reader.readAsText(file);
+    });
+  }
+
+  // Helpers existentes do seu código:
+  const loginView = document.getElementById("login-view");
+  const menuView  = document.getElementById("menu-view");
+  const form      = document.getElementById("login-form");
+  const emailEl   = document.getElementById("email");
+  const passEl    = document.getElementById("password");
+  const keyEl     = document.getElementById("key");
+  const emailErr  = document.getElementById("email-error");
+  const passErr   = document.getElementById("password-error");
+  const keyErr    = document.getElementById("key-error");
+  const formErr   = document.getElementById("form-error");
+  const logoutBtn = document.getElementById("logout-btn");
+  const loginBtn  = document.getElementById("login-btn");
+
+  const sessionKey = "auth_demo_logged";
+  function isLogged()   { return localStorage.getItem(sessionKey) === "1"; }
+  function setLogged(v) { v ? localStorage.setItem(sessionKey, "1") : localStorage.removeItem(sessionKey); }
+  function showMenu()   { loginView.classList.add("hidden"); menuView.classList.remove("hidden"); }
+  function showLogin()  { menuView.classList.add("hidden");  loginView.classList.remove("hidden"); }
+  if (isLogged()) showMenu(); else showLogin();
+
+  function validateEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function validateKey(v){ return /^[A-Za-z0-9]{4,32}$/.test(v); }
+
+  // Função para obter a fonte de dados ativa
+  function getUsersData() {
+    // Prioriza users.js se estiver definido
+    if (Array.isArray(window.USERS_CACHE) && window.USERS_CACHE.length) {
+      return window.USERS_CACHE;
+    }
+    // Caso contrário, usa o que veio do users.json via FileReader
+    if (Array.isArray(USERS_CACHE_LOCAL) && USERS_CACHE_LOCAL.length) {
+      return USERS_CACHE_LOCAL;
+    }
+    return null;
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    emailErr.textContent = "";
+    passErr.textContent  = "";
+    keyErr.textContent   = "";
+    formErr.textContent  = "";
+
+    const email = emailEl.value.trim();
+    const pass  = passEl.value;
+    const chave = keyEl.value.trim();
+
+    let ok = true;
+    if (!email) { emailErr.textContent = "Informe o e-mail."; ok = false; }
+    else if (!validateEmail(email)) { emailErr.textContent = "E-mail inválido."; ok = false; }
+
+    if (!pass) { passErr.textContent = "Informe a senha."; ok = false; }
+    else if (pass.length < 6) { passErr.textContent = "Mínimo de 6 caracteres."; ok = false; }
+
+    if (!chave) { keyErr.textContent = "Informe a chave."; ok = false; }
+    else if (!validateKey(chave)) { keyErr.textContent = "Chave alfanumérica inválida."; ok = false; }
+
+    if (!ok) return;
+
+    const users = getUsersData();
+    if (!users) {
+      formErr.textContent = "Carregue a base de usuários (users.js ou users.json) antes do login.";
+      return;
+    }
+
+    const found = users.find(u =>
+      u.email === email &&
+      u.password === pass &&
+      u.chave === chave
+    );
+
+    if (!found) {
+      formErr.textContent = "Credenciais ou chave inválidas.";
+      return;
+    }
+
+    setLogged(true);
+    requestAnimationFrame(() => showMenu());
+  });
+
+  logoutBtn.addEventListener("click", () => {
+    setLogged(false);
+    showLogin();
+    form.reset();
+  });
+</script>
+
+
+</body>
+</html>
