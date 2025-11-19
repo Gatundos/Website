@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Board Game BETA</title>
+  <title>Gatundos Menu</title>
   <style>
     :root {
       --sidebar-width: 260px;
@@ -13,6 +13,7 @@
       --muted: #94a3b8;
       --accent: #6ee7b7;
       --link-hover: #a7f3d0;
+      --border: #222634;
     }
 
     * { box-sizing: border-box; }
@@ -31,7 +32,7 @@
       min-height: 100vh;
     }
 
-    /* Barra lateral fixa */
+    /* Sidebar */
     aside {
       grid-area: sidebar;
       position: sticky;
@@ -40,15 +41,14 @@
       height: 100dvh;
       padding: 20px 16px;
       background: var(--panel);
-      border-right: 1px solid #222634;
+      border-right: 1px solid var(--border);
       overflow: auto;
     }
-
     .brand {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       font-weight: 700;
       letter-spacing: .4px;
     }
@@ -58,11 +58,7 @@
       background: var(--accent);
       box-shadow: 0 0 14px var(--accent);
     }
-    nav ul {
-      list-style: none;
-      margin: 12px 0 0 0;
-      padding: 0;
-    }
+    nav ul { list-style: none; margin: 12px 0 0; padding: 0; }
     nav li { margin: 6px 0; }
     nav a {
       display: block;
@@ -75,11 +71,11 @@
     nav a:hover { background: #1f2533; color: var(--link-hover); }
     nav a.active { background: #1b2130; outline: 1px solid #273049; }
 
-    /* Cabeçalho com imagem centralizada */
+    /* Header */
     header {
       grid-area: header;
       background: linear-gradient(180deg, #0f1115 0%, #0f1115cc 100%);
-      border-bottom: 1px solid #222634;
+      border-bottom: 1px solid var(--border);
       padding: 16px 20px 12px;
     }
     .top-image-wrap {
@@ -93,24 +89,31 @@
       height: auto;
       display: block;
       border-radius: 12px;
-      outline: 1px solid #222634;
+      outline: 1px solid var(--border);
     }
 
-    /* Área principal que recebe subpáginas */
+    /* Main com iframe */
     main {
       grid-area: main;
       padding: 20px;
-      overflow: auto;
+      overflow: hidden;
     }
-    .panel {
+    .frame-wrap {
       background: var(--panel);
-      border: 1px solid #222634;
+      border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 18px;
-      min-height: 40dvh;
+      height: calc(100dvh - 20px - 12px - 16px - 20px);
+      min-height: 400px;
+      overflow: hidden;
+    }
+    iframe#viewer {
+      border: none;
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
-    /* Responsivo: sidebar vira topo em telas pequenas */
+    /* Responsivo */
     @media (max-width: 820px) {
       body {
         grid-template-columns: 1fr;
@@ -123,9 +126,9 @@
         position: relative;
         height: auto;
         border-right: none;
-        border-bottom: 1px solid #222634;
+        border-bottom: 1px solid var(--border);
       }
-      nav a { padding: 12px 14px; }
+      .frame-wrap { height: 70dvh; }
     }
   </style>
 </head>
@@ -137,92 +140,67 @@
     </div>
     <nav>
       <ul>
-        <li><a href="../Personagens/Personagem.html" data-page>Clãs</a></li>
-        <li><a href="../Personagens/Fubá.html" data-page>Personagens</a></li>
-        <li><a href="paginas/cartas.html" data-page>Cartas</a></li>
-        <li><a href="paginas/arvore.html" data-page>Árvore de Habilidades</a></li>
-        <li><a href="paginas/hospital.html" data-page>Hospital</a></li>
-        <li><a href="paginas/mercado.html" data-page>Mercado</a></li>
-        <li><a href="paginas/config.html" data-page>Configurações</a></li>
+        <!-- Mantenha href (hash) e data-src idênticos ao caminho real do arquivo -->
+        <li><a href="#Menu/Cla.html" data-src="Menu/Cla.html">Clãs</a></li>
+        <li><a href="../Personagens/Personagens.html" data-src="../Personagens/Personagens.html">Personagens</a></li>
+        <li><a href="#paginas/cartas.html" data-src="paginas/cartas.html">Cartas</a></li>
+        <li><a href="#paginas/arvore.html" data-src="paginas/arvore.html">Árvore de Habilidades</a></li>
+        <li><a href="#paginas/hospital.html" data-src="paginas/hospital.html">Hospital</a></li>
+        <li><a href="#paginas/mercado.html" data-src="paginas/mercado.html">Mercado</a></li>
+        <li><a href="#paginas/config.html" data-src="paginas/config.html">Configurações</a></li>
       </ul>
     </nav>
   </aside>
 
   <header>
     <div class="top-image-wrap">
-      <!-- Troque o src pela sua imagem -->
       <img class="top-image" src="assets/topo.jpg" alt="Imagem topo centralizada" />
     </div>
   </header>
 
   <main>
-    <div id="conteudo" class="panel">
-      Selecione uma opção no menu lateral para carregar a subpágina. [Conteúdo dinâmico] [web:3]
+    <div class="frame-wrap">
+      <iframe
+        id="viewer"
+        title="Subpágina"
+        src="about:blank"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        sandbox="allow-forms allow-same-origin allow-scripts"
+      ></iframe>
     </div>
   </main>
 
   <script>
-    // Utilitários
-    const conteudo = document.getElementById('conteudo');
-    const links = Array.from(document.querySelectorAll('a[data-page]'));
+    const iframe = document.getElementById('viewer');
+    const links = Array.from(document.querySelectorAll('nav a[data-src]'));
 
-    function setActive(href) {
-      links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === href));
+    function setActiveBySrc(src) {
+      links.forEach(a => a.classList.toggle('active', a.dataset.src === src));
     }
 
-    // Carrega HTML externo no container e executa scripts embutidos, se houver
-    async function loadPage(url) {
-      try {
-        const resp = await fetch(url, { credentials: 'same-origin' });
-        if (!resp.ok) throw new Error('Erro ao carregar: ' + resp.status);
-        const html = await resp.text();
-        conteudo.innerHTML = html;
-
-        // Executa scripts das subpáginas em ordem
-        const scripts = conteudo.querySelectorAll('script');
-        for (const oldScript of scripts) {
-          const s = document.createElement('script');
-          if (oldScript.src) {
-            s.src = oldScript.src;
-            s.async = false;
-          } else {
-            s.textContent = oldScript.textContent;
-          }
-          document.head.appendChild(s);
-          s.remove();
-        }
-      } catch (e) {
-        conteudo.innerHTML = '<p style="color:#fca5a5">Falha ao carregar a página.</p>';
-        console.error(e);
-      }
+    function navigateTo(src, push = true) {
+      iframe.src = src;
+      setActiveBySrc(src);
+      if (push) location.hash = src;
     }
 
-    // Navegação com histórico (SPA leve)
-    function navigate(href, push = true) {
-      loadPage(href);
-      setActive(href);
-      if (push) history.pushState({ href }, '', '#' + href);
-    }
-
-    // Clique no menu
+    // Clique no menu: atualiza iframe e hash
     links.forEach(a => {
-      a.addEventListener('click', ev => {
+      a.addEventListener('click', (ev) => {
         ev.preventDefault();
-        navigate(a.getAttribute('href'), true);
+        navigateTo(a.dataset.src, true);
       });
     });
 
-    // Suporta voltar/avançar do navegador
-    window.addEventListener('popstate', ev => {
-      const href = (ev.state && ev.state.href) || (location.hash ? location.hash.slice(1) : links[0].getAttribute('href'));
-      navigate(href, false);
-    });
+    // Restaura a partir do hash ou usa fallback
+    function initFromHash() {
+      const src = location.hash ? location.hash.slice(1) : 'Menu/Cla.html';
+      navigateTo(src, false);
+    }
 
-    // Inicialização: abre hash ou primeira página
-    (function init() {
-      const initial = location.hash ? location.hash.slice(1) : links[0].getAttribute('href');
-      navigate(initial, false);
-    })();
+    window.addEventListener('hashchange', initFromHash);
+    initFromHash(); // apenas uma chamada de init
   </script>
 </body>
 </html>
