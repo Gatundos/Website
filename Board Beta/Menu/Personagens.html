@@ -1,68 +1,86 @@
 <!doctype html>
-<meta charset="utf-8">
-<title>Personagens</title>
-<style>
-table { border-collapse: collapse; width: 100% }
-th, td { border: 1px solid #ddd; padding: 8px; text-align: left }
-tr:nth-child(even){ background:#f6f6f6 }
-#conteudo { margin-top:16px; border:1px solid #ccc; padding:12px; min-height:200px }
-</style>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Personagens</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 24px; }
+    table { border-collapse: collapse; width: 100%; }
+    caption { text-align: left; font-weight: 600; margin-bottom: 8px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    thead th { background: #f0f0f0; }
+    tr:nth-child(even) td { background: #f9f9f9; }
+    .status { margin: 12px 0; font-size: 0.95rem; }
+    .btn-link { color: #0b57d0; text-decoration: none; }
+    .btn-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
 
-<table id="tbl">
-  <thead>
-    <tr>
-      <th>Nome</th><th>Título</th><th>Classe</th><th>Clã</th><th>Selecionar</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+  <h1>Personagens</h1>
 
-<div id="conteudo">Selecione um personagem para carregar aqui.</div>
+  <div class="status" id="status">Carregando lista…</div>
 
-<script>
-async function carregarLista() {
-  const resp = await fetch('./personagens.json');
-  const itens = await resp.json();
+  <table id="tbl">
+    <caption>Lista de personagens</caption>
+    <thead>
+      <tr>
+        <th scope="col">Nome</th>
+        <th scope="col">Título</th>
+        <th scope="col">Classe</th>
+        <th scope="col">Clã</th>
+        <th scope="col">Ação</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-  const tbody = document.querySelector('#tbl tbody');
-  tbody.innerHTML = '';
-
-  itens.forEach(p => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${p.nome}</td>
-      <td>${p.titulo}</td>
-      <td>${p.classe}</td>
-      <td>${p.cla}</td>
-      <td><a href="${p.arquivo}" data-arquivo="${p.arquivo}">Abrir</a></td>
-    `;
-    tr.querySelector('a').addEventListener('click', async (e) => {
-      e.preventDefault();
-      await carregarNoContainer(e.currentTarget.dataset.arquivo);
-    });
-    tbody.appendChild(tr);
-  });
-}
-
-async function carregarNoContainer(url) {
-  const conteudo = document.getElementById('conteudo');
-  try {
-    const resp = await fetch(url, { mode: 'same-origin' });
-    if (!resp.ok) throw new Error('Falha ao carregar: ' + resp.status);
-    const html = await resp.text();
-    conteudo.innerHTML = html;
-    // Se a página do personagem tiver <script>, eles não executam via innerHTML.
-    // Para executar scripts embutidos, recrie-os:
-    conteudo.querySelectorAll('script').forEach(old => {
-      const s = document.createElement('script');
-      if (old.src) { s.src = old.src; } else { s.textContent = old.textContent; }
-      document.body.appendChild(s);
-      s.remove();
-    });
-  } catch (err) {
-    conteudo.textContent = 'Erro: ' + err.message;
+  <script>
+  // Utilitário: codifica apenas se necessário, preservando caminhos já válidos
+  function encodeIfNeeded(path) {
+    // Codifica apenas segmentos que contenham espaços ou caracteres não ASCII (ex.: á, ã, ç)
+    return path.split('/').map(seg => /[^\w.-]/u.test(seg) ? encodeURIComponent(seg) : seg).join('/');
   }
-}
 
-carregarLista();
-</script>
+  async function carregarLista() {
+    const status = document.getElementById('status');
+    try {
+      const resp = await fetch('./personagens.json', { cache: 'no-store' });
+      if (!resp.ok) throw new Error('Falha ao ler JSON: ' + resp.status + ' ' + resp.statusText);
+      const itens = await resp.json();
+
+      const tbody = document.querySelector('#tbl tbody');
+      tbody.innerHTML = '';
+
+      // Ordenação opcional por nome
+      itens.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+
+      for (const p of itens) {
+        const hrefRaw = String(p.arquivo || '');
+        const href = encodeIfNeeded(hrefRaw); // cuida de espaços e acentos
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${p.nome ?? ''}</td>
+          <td>${p.titulo ?? ''}</td>
+          <td>${p.classe ?? ''}</td>
+          <td>${p.cla ?? ''}</td>
+          <td><a class="btn-link" href="${href}">Abrir</a></td>
+        `;
+        tbody.appendChild(tr);
+      }
+
+      status.textContent = 'Pronto. Clique em Abrir para navegar.';
+    } catch (e) {
+      status.textContent = 'Erro ao carregar a lista: ' + e.message;
+      console.error(e);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', carregarLista);
+  </script>
+
+</body>
+</html>
