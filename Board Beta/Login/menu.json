@@ -1,7 +1,0 @@
-{
-  "personagens": [
-    { "titulo": "Fubá", "path": "Fubá.html", "rota": "/personagens/p1" },
-    { "titulo": "Personagem 2", "path": "p2.html", "rota": "/personagens/p2" },
-    { "titulo": "Personagem 3", "path": "p3.html", "rota": "/personagens/p3" }
-  ]
-}
