@@ -1,1201 +1,545 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-BR">
 <head>
-	<title>Gatundo</title>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="format-detection" content="telephone=no">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="author" content="">
-	<meta name="keywords" content="">
-	<meta name="description" content="">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gatundo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Arial Black', Arial, sans-serif; 
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0d1a 50%, #2d0d2d 100%); 
+            color: #fff; 
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+        
+        /* Header */
+        header { 
+            background: rgba(0,0,0,0.95); 
+            padding: 1rem 0; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            backdrop-filter: blur(20px);
+        }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { 
+            font-size: 2.5rem; 
+            font-weight: 900; 
+            background: linear-gradient(45deg, #ffd700, #ff6b35); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            text-shadow: 0 0 30px rgba(255,215,0,0.5);
+        }
+        .menu { display: flex; gap: 2rem; list-style: none; }
+        .menu a { 
+            color: #fff; 
+            text-decoration: none; 
+            font-weight: bold; 
+            padding: 0.5rem 1rem; 
+            border-radius: 25px; 
+            transition: all 0.3s; 
+        }
+        .menu a:hover { background: #ffd700; color: #000; transform: scale(1.05); }
+        
+        /* Intro Centralizada */
+        .intro { 
+            text-align: center; 
+            padding: 4rem 2rem; 
+            position: relative;
+        }
+        .main-logo { 
+            max-width: 400px; 
+            max-height: 250px; 
+            width: 100%; 
+            height: auto; 
+            margin-bottom: 2rem; 
+            filter: drop-shadow(0 20px 40px rgba(255,107,53,0.5));
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            from { filter: drop-shadow(0 20px 40px rgba(255,107,53,0.5)); }
+            to { filter: drop-shadow(0 30px 60px rgba(255,215,0,0.8)); }
+        }
+        .welcome-text { 
+            font-size: 2.5rem; 
+            margin-bottom: 1rem; 
+            background: linear-gradient(45deg, #fff, #ffd700); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+        .subtext { font-size: 1.3rem; opacity: 0.9; margin-bottom: 3rem; }
+        
+        /* Banner Vermelho */
+        .banner-red { 
+            background: linear-gradient(135deg, #8b0000, #dc143c, #ff4500); 
+            padding: 2rem; 
+            margin: 2rem 0; 
+            border-radius: 20px; 
+            text-align: center; 
+            box-shadow: 0 20px 40px rgba(139,0,0,0.6);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        .banner-title { font-size: 2.2rem; margin-bottom: 1rem; font-weight: 900; }
+        .banner-text { font-size: 1.2rem; }
+        
+        /* Vídeo Explicativo */
+        .video-section { 
+            display: flex; 
+            justify-content: center; 
+            margin: 4rem 0; 
+            padding: 2rem; 
+            background: rgba(0,0,0,0.5); 
+            border-radius: 25px; 
+            backdrop-filter: blur(15px);
+        }
+        .video-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 900px; 
+            aspect-ratio: 16/9; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        }
+        .video-container iframe { 
+            width: 100%; 
+            height: 100%; 
+            border: none; 
+        }
+        
+        /* Cards Interativos Bottom */
+        .cards-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 2rem; 
+            padding: 4rem 0; 
+        }
+        .card { 
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(0,0,0,0.5)); 
+            border: 2px solid rgba(255,215,0,0.3); 
+            border-radius: 20px; 
+            padding: 2.5rem 2rem; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94); 
+            backdrop-filter: blur(15px); 
+            position: relative; 
+            overflow: hidden;
+        }
+        .card::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: -100%; 
+            width: 100%; 
+            height: 100%; 
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); 
+            transition: 0.6s; 
+        }
+        .card:hover::before { left: 100%; }
+        .card:hover { 
+            transform: translateY(-15px) scale(1.05); 
+            border-color: #ffd700; 
+            box-shadow: 0 30px 60px rgba(255,215,0,0.4); 
+        }
+        .card h3 { 
+            font-size: 1.8rem; 
+            margin-bottom: 1rem; 
+            background: linear-gradient(45deg, #ffd700, #fff); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+        }
+        .card p { opacity: 0.9; line-height: 1.6; }
+        
+        /* Modal Overlay */
+        .modal-overlay { 
+            display: none; 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0,0,0,0.9); 
+            z-index: 1000; 
+            backdrop-filter: blur(10px); 
+            align-items: center; 
+            justify-content: center; 
+            animation: fadeIn 0.3s; 
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal { 
+            background: linear-gradient(145deg, #1a0a1a, #2d1a2d); 
+            border: 3px solid #ffd700; 
+            border-radius: 25px; 
+            max-width: 90vw; 
+            max-height: 90vh; 
+            padding: 3rem; 
+            overflow-y: auto; 
+            position: relative; 
+            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
+            animation: modalSlide 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+        }
+        @keyframes modalSlide {
+            from { transform: scale(0.7) translateY(50px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .modal h2 { color: #ffd700; margin-bottom: 1.5rem; font-size: 2.5rem; text-align: center; }
+        .modal-content { line-height: 1.7; font-size: 1.1rem; }
+        .close-modal { 
+            position: absolute; 
+            top: 1.5rem; 
+            right: 2rem; 
+            background: none; 
+            border: none; 
+            font-size: 2.5rem; 
+            color: #ffd700; 
+            cursor: pointer; 
+            width: 40px; 
+            height: 40px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 50%; 
+            transition: 0.3s;
+        }
+        .close-modal:hover { background: rgba(255,215,0,0.3); transform: rotate(90deg); }
+        
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .logo { font-size: 2rem; }
+            .menu { flex-direction: column; gap: 1rem; }
+            .welcome-text { font-size: 2rem; }
+            .cards-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .modal { padding: 2rem 1.5rem; margin: 1rem; }
+        }
 
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-
-	<link rel="stylesheet" type="text/css" href="css/normalize.css">
-	<link rel="stylesheet" type="text/css" href="icomoon/icomoon.css">
-	<link rel="stylesheet" type="text/css" href="css/vendor.css">
-	<link rel="stylesheet" type="text/css" href="style.css">
-
+        /* Hero História */
+        .historia-hero { 
+            text-align: center; 
+            padding: 5rem 2rem; 
+            position: relative;
+            background: linear-gradient(135deg, rgba(35,47,64,0.8), rgba(15,25,37,0.8));
+        }
+        .historia-title { 
+            font-size: 4rem; 
+            margin-bottom: 2.5rem; 
+            background: linear-gradient(45deg, var(--accent-gold), var(--accent-orange), var(--accent-red1)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 50px rgba(242,170,82,0.8);
+            animation: pulseGlow 2.5s ease-in-out infinite alternate;
+        }
+        @keyframes pulseGlow {
+            from { 
+                filter: drop-shadow(0 0 30px rgba(242,170,82,0.6)) brightness(1); 
+            }
+            to { 
+                filter: drop-shadow(0 0 60px rgba(242,127,61,1)) brightness(1.1); 
+            }
+        }
+        .historia-subtitle { 
+            font-size: 1.6rem; 
+            opacity: 0.95; 
+            margin-bottom: 1rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .historia-image { 
+            max-width: 100%; 
+            height: 450px; 
+            object-fit: cover; 
+            border-radius: 35px; 
+            box-shadow: 0 50px 100px rgba(242,62,46,0.6); 
+            margin: 3rem 0;
+            border: 5px solid var(--accent-red2);
+            transition: transform 0.5s;
+        }
+        .historia-image:hover { transform: scale(1.02); }
+         .historia-title { 
+            font-size: 4rem; 
+            margin-bottom: 2.5rem; 
+            background: linear-gradient(45deg, var(--accent-gold), var(--accent-orange), var(--accent-red1)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 50px rgba(242,170,82,0.8);
+            animation: pulseGlow 2.5s ease-in-out infinite alternate;
+        }
+        @keyframes pulseGlow {
+            from { 
+                filter: drop-shadow(0 0 30px rgba(242,170,82,0.6)) brightness(1); 
+            }
+            to { 
+                filter: drop-shadow(0 0 60px rgba(242,127,61,1)) brightness(1.1); 
+            }
+        }
+        .historia-subtitle { 
+            font-size: 1.6rem; 
+            opacity: 0.95; 
+            margin-bottom: 1rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .historia-image { 
+            max-width: 100%; 
+            height: 450px; 
+            object-fit: cover; 
+            border-radius: 35px; 
+            box-shadow: 0 50px 100px rgba(242,62,46,0.6); 
+            margin: 3rem 0;
+            border: 5px solid var(--accent-red2);
+            transition: transform 0.5s;
+        }
+        .historia-image:hover { transform: scale(1.02); }
+    </style>
 </head>
-
-<body data-bs-spy="scroll" data-bs-target="#header" tabindex="0">
-
-	<div id="header-wrap">
-
-		<div class="top-content">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-md-6">
-						<div class="social-links">
-							<ul>
-								<li>
-									<a href="https://www.facebook.com/profile.php?id=61575019002011&sk=about><i class="icon icon-facebook"></i></a>
-								</li>
-								<li>
-									<a href="https://www.instagram.com/gatundos/"><i class="icon icon-twitter"></i></a>
-								</li>
-								<li>
-									<a href="https://www.youtube.com/@GatundoSchuede"><i class="icon icon-youtube-play"></i></a>
-								</li>
-								<li>
-									<a href="#"><i class="icon icon-behance-square"></i></a>
-								</li>
-							</ul>
-						</div><!--social-links-->
-					</div>
-					<div class="col-md-6">
-						<div class="right-element">
-							<a href="#" class="user-account for-buy"><i
-									class="icon icon-user"></i><span>Conta</span></a>
-							<a href="#" class="cart for-buy"><i class="icon icon-clipboard"></i><span>Carrinho:(0
-									$)</span></a>
-
-							<div class="action-menu">
-
-								<div class="search-bar">
-									<a href="#" class="search-button search-toggle" data-selector="#header-wrap">
-										<i class="icon icon-search"></i>
-									</a>
-									<form role="search" method="get" class="search-box">
-										<input class="search-field text search-input" placeholder="Search"
-											type="search">
-									</form>
-								</div>
-							</div>
-
-						</div><!--top-right-->
-					</div>
-
-				</div>
-			</div>
-		</div><!--top-content-->
-
-		<header id="header">
-			<div class="container-fluid">
-				<div class="row">
-
-					<div class="col-md-2">
-						<div class="main-logo">
-							<a href="index.html"><img src="images/main-logo1.png" alt="logo" tyle="max-width:35%"></a>
-						</div>
-
-					</div>
-
-					<div class="col-md-10">
-
-						<nav id="navbar">
-							<div class="main-menu stellarnav">
-								<ul class="menu-list">
-									<li class="menu-item active"><a href="#home">Home</a></li>
-									<li class="menu-item has-sub">
-										<a href="#pages" class="nav-link">Páginas</a>
-
-										<ul>
-											<li class="active"><a href="index.html">Home</a></li>
-											<li><a href="Board Beta/Login/Login.html">Login</a></li>
-											<li><a href="index.html">Sobre</a></li>
-											<li><a href="index.html">Bestiário</a></li>
-											<li><a href="index.html">Blog</a></li>
-											<li><a href="https://linktr.ee/gatundo">Midias Sociais</a></li>
-											<li><a href="index.html">Nossa Loja</a></li>
-											<li><a href="index.html">O livro</a></li>
-											<li><a href="index.html">Contato</a></li>
-											<li><a href="index.html">Obrigado</a></li>
-										</ul>
-
-									</li>
-									<li class="menu-item"><a href="#featured-books" class="nav-link">Livros de Gatundo</a></li>
-									<li class="menu-item"><a href="#popular-books" class="nav-link">Mundo de Gatundo</a></li>
-									<li class="menu-item"><a href="#special-offer" class="nav-link">Personagens</a></li>
-									<li class="menu-item"><a href="#latest-blog" class="nav-link">Artigos</a></li>
-									<li class="menu-item"><a href="#download-app" class="nav-link">Jogos</a></li>
-								</ul>
-
-								<div class="hamburger">
-									<span class="bar"></span>
-									<span class="bar"></span>
-									<span class="bar"></span>
-								</div>
-
-							</div>
-						</nav>
-
-					</div>
-
-				</div>
-			</div>
-		</header>
-
-	</div><!--header-wrap-->
-
-	<section id="billboard">
-
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-
-					<button class="prev slick-arrow">
-						<i class="icon icon-arrow-left"></i>
-					</button>
-
-					<div class="main-slider pattern-overlay">
-						<div class="slider-item">
-							<div class="banner-content">
-								<h2 class="banner-title">Gatundo</h2>
-								<p>🌌 Gatundo é um mundo onde tudo tem alma:</p>
-								<p>	📖 Uma página esquecida pode mudar o destino de uma civilização.</p>
-								<p>	🔮 Um sonho sonhado por um gato pode se tornar um artefato real.</p>
-								<p>💫 E até a menor criatura — até mesmo um inseto que canta sozinho no escuro — pode virar o fio que desfaz ou salva o mundo.</p>
-								
-								<div class="btn-wrap">
-									<a href="#" class="btn btn-outline-accent btn-accent-arrow">Read More<i
-											class="icon icon-ns-arrow-right"></i></a>
-								</div>
-							</div><!--banner-content-->
-							<img src="images/main-banner1.jpg" alt="banner" class="banner-image" tyle="max-width:25%">
-						</div><!--slider-item-->
-
-						<div class="slider-item">
-							<div class="banner-content">
-								<h2 class="banner-title">Gatundo</h2>
-								<p>Àqueles que buscam nas páginas um refúgio, uma faísca de esperança ou um espelho para a própria alma. Que encontrem aqui um pouco de si mesmos.
-</p>
-								<div class="btn-wrap">
-									<a href="#" class="btn btn-outline-accent btn-accent-arrow">Read More<i
-											class="icon icon-ns-arrow-right"></i></a>
-								</div>
-							</div><!--banner-content-->
-							<img src="images/main-banner2.jpg" alt="banner" class="banner-image" tyle="max-width:25%">
-						</div><!--slider-item-->
-
-					</div><!--slider-->
-
-					<button class="next slick-arrow">
-						<i class="icon icon-arrow-right"></i>
-					</button>
-
-				</div>
-			</div>
-		</div>
-
-	</section>
-
-	<section id="client-holder" data-aos="fade-up">
-		<div class="container">
-			<div class="row">
-				<div class="inner-content">
-					<div class="logo-wrap">
-						<div class="grid">
-							<a href="#"><img src="images/client-image1.png" alt="client"></a>
-							<a href="#"><img src="images/client-image2.png" alt="client"></a>
-							<a href="#"><img src="images/client-image3.png" alt="client"></a>
-							<a href="#"><img src="images/client-image4.png" alt="client"></a>
-							<a href="#"><img src="images/client-image5.png" alt="client"></a>
-						</div>
-					</div><!--image-holder-->
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<section id="featured-books" class="py-5 my-5">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-
-					<div class="section-header align-center">
-						<div class="title">
-							<span>Descubra o Mundo de GATUNDO</span>
-						</div>
-						<h2 class="section-title">Livros de Gatundo</h2>
-					</div>
-
-					<div class="product-list" data-aos="fade-up">
-						<div class="row">
-
-							<div class="col-md-3">
-								<div class="product-item">
-									<figure class="product-style">
-										<img src="images/product-item1.jpg" alt="Books" class="product-item">
-										<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-									</figure>
-									<figcaption>
-										<h3>A Última Folha de VOR'RA</h3>
-										<span>Emerson Schuede</span>
-										<div class="item-price">Não disponivel</div>
-									</figcaption>
-								</div>
-							</div>
-
-							<div class="col-md-3">
-								<div class="product-item">
-									<figure class="product-style">
-										<img src="images/product-item2.jpg" alt="Books" class="product-item">
-										<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-									</figure>
-									<figcaption>
-										<h3>Literatura do Equilibrium</h3>
-										<span>Emerson Schuede</span>
-										<div class="item-price">Não disponivel</div>
-									</figcaption>
-								</div>
-							</div>
-
-							<div class="col-md-3">
-								<div class="product-item">
-									<figure class="product-style">
-										<img src="images/product-item3.jpg" alt="Books" class="product-item">
-										<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-									</figure>
-									<figcaption>
-										<h3>As Aventuras de Schina, o velho</h3>
-										<span>Emerson Schuede</span>
-										<div class="item-price">Não disponivel</div>
-									</figcaption>
-								</div>
-							</div>
-
-							<div class="col-md-3">
-								<div class="product-item">
-									<figure class="product-style">
-										<img src="images/product-item4.jpg" alt="Books" class="product-item">
-										<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-									</figure>
-									<figcaption>
-										<h3>A História de Kumohime</h3>
-										<span>Emerson Schuede</span>
-										<div class="item-price">Não disponivel</div>
-									</figcaption>
-								</div>
-							</div>
-
-						</div><!--ft-books-slider-->
-					</div><!--grid-->
-
-
-				</div><!--inner-content-->
-			</div>
-
-			<div class="row">
-				<div class="col-md-12">
-
-					<div class="btn-wrap align-right">
-						<a href="#" class="btn-accent-arrow">Veja todos os Produtos <i
-								class="icon icon-ns-arrow-right"></i></a>
-					</div>
-
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<section id="best-selling" class="leaf-pattern-overlay">
-		<div class="corner-pattern-overlay"></div>
-		<div class="container">
-			<div class="row justify-content-center">
-
-				<div class="col-md-8">
-
-					<div class="row">
-
-						<div class="col-md-6">
-							<figure class="products-thumb">
-								<img src="images/single-image.jpg" alt="book" class="single-image">
-							</figure>
-						</div>
-
-						<div class="col-md-6">
-							<div class="product-entry">
-								<h2 class="section-title divider">Livro Principal</h2>
-
-								<div class="products-content">
-									<div class="author-name">por Emerson Schuede</div>
-									<h3 class="item-title">Gatundo o mundo fantastico</h3>
-									<p>O mundo mágico de GATUNDO
-"O ronronar não é apenas um som, mas a manifestação vibratória da mais pura contentamento, uma filosofia de vida em frequência audível."</p>
-									<div class="item-price">Não disponivel</div>
-									<div class="btn-wrap">
-										<a href="#" class="btn-accent-arrow">Compre agora <i
-												class="icon icon-ns-arrow-right"></i></a>
-									</div>
-								</div>
-
-							</div>
-						</div>
-
-					</div>
-					<!-- / row -->
-
-				</div>
-
-			</div>
-		</div>
-	</section>
-
-	<section id="popular-books" class="bookshelf py-5 my-5">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-
-					<div class="section-header align-center">
-						<div class="title">
-							<span>Mundo de Gatundo</span>
-						</div>
-						<h2 class="section-title">Livros e Contos</h2>
-					</div>
-
-					<ul class="tabs">
-						<li data-tab-target="#all-genre" class="active tab">Tudo</li>
-						<li data-tab-target="#business" class="tab">Contos</li>
-						<li data-tab-target="#technology" class="tab">RPG</li>
-						<li data-tab-target="#romantic" class="tab">Bestiário</li>
-						<li data-tab-target="#adventure" class="tab">Missões Extras</li>
-						<li data-tab-target="#fictional" class="tab">Pacotes de Cartas</li>
-					</ul>
-
-					<div class="tab-content">
-						<div id="all-genre" data-tab-content class="active">
-							<div class="row">
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item1.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>A ultima folha de Vor'ra</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">$ 30.00</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item2.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Literatura do Equilibrium</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item3.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>As aventuras de Schina o Velho</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item4.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>História de Kumohime</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-
-							</div>
-							<div class="row">
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item5.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Fundamentos da Brutalidade</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item6.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Expansão de Cartas</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">$ 40.00</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item7.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Livro de mapas</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item8.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Livro RPG</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-
-							</div>
-
-						</div>
-						<div id="business" data-tab-content>
-							<div class="row">
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item2.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Literatura do Equilibrium</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item4.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>História de Kumohine</h3>
-											<span>Jogos de Gatundo</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item6.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Expansão de Cartas</h3>
-											<span>Jogos de Gatundo</span>
-											<div class="item-price">$ 120.00</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item8.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Livro RPG</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">$ 40.00</div>
-										</figcaption>
-									</div>
-								</div>
-
-							</div>
-						</div>
-
-						<div id="technology" data-tab-content>
-							<div class="row">
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item1.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Literatura do Equilibrium</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item3.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>As aventuras de Schina o velho</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item5.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Fundamentos da Brutalidade</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item7.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Livro RPG</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div id="romantic" data-tab-content>
-							<div class="row">
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item1.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>A ultima folha de Vor'ra</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item3.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Expansão de Cartas</h3>
-											<span>Jogos de Gatundo</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item5.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Fundamentos da Brutalidade</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item7.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Livro RPG</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">$ 40.00</div>
-										</figcaption>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div id="adventure" data-tab-content>
-							<div class="row">
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item5.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Fundamentos da Brutalidade</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">$ 40.00</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item7.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Livro RPG</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">$ 40.00</div>
-										</figcaption>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div id="fictional" data-tab-content>
-							<div class="row">
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item5.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Fundamentos da Brutalidade</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="product-item">
-										<figure class="product-style">
-											<img src="images/tab-item7.jpg" alt="Books" class="product-item">
-											<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-										</figure>
-										<figcaption>
-											<h3>Livro RPG</h3>
-											<span>Emerson Schuede</span>
-											<div class="item-price">Não disponivel</div>
-										</figcaption>
-									</div>
-								</div>
-							</div>
-						</div>
-
-					</div>
-
-				</div><!--inner-tabs-->
-
-			</div>
-		</div>
-	</section>
-
-	<section id="quotation" class="align-center pb-5 mb-5">
-		<div class="inner-content">
-			<h2 class="section-title divider">Dica de GATUNDO</h2>
-			<blockquote data-aos="fade-up">
-				<q>“O olhar fixo de um gato não questiona, ele simplesmente é a pergunta em sua forma mais essencial.
-
-Àqueles que buscam nas páginas um refúgio, uma faísca de esperança ou um espelho para a própria alma. Que encontrem aqui um pouco de si mesmos.
-”</q>
-				<div class="author-name">Guardião de Gatundo</div>
-			</blockquote>
-		</div>
-	</section>
-
-	<!---section id="special-offer" class="bookshelf pb-5 mb-5">
-
-		<div class="section-header align-center">
-			<div class="title">
-				<span>Oportunidades</span>
-			</div>
-			<h2 class="section-title">Descontos</h2>
-		</div>
-
-		<div class="container">
-			<div class="row">
-				<div class="inner-content">
-					<div class="product-list" data-aos="fade-up">
-						<div class="grid product-grid">
-							<div class="product-item">
-								<figure class="product-style">
-									<img src="images/product-item5.jpg" alt="Books" class="product-item">
-									<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-								</figure>
-								<figcaption>
-									<h3>Fundamentos da Brutalidade</h3>
-									<span>Bigódinho & Emerson Schuede</span>
-									<div class="item-price">
-										<span class="prev-price">$ 50.00</span>$ 40.00
-									</div>
-								</div>
-							</figcaption>
-
-							<div class="product-item">
-								<figure class="product-style">
-									<img src="images/product-item6.jpg" alt="Books" class="product-item">
-									<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-								</figure>
-								<figcaption>
-									<h3>Expansão de Cartas</h3>
-									<span>Jogo de Gatundo</span>
-									<div class="item-price">
-										<span class="prev-price">R$ 120.00</span>R$ 100.00
-									</div>
-								</div>
-							</figcaption>
-
-							<div class="product-item">
-								<figure class="product-style">
-									<img src="images/product-item7.jpg" alt="Books" class="product-item">
-									<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-								</figure>
-								<figcaption>
-									<h3>Gatundo Livro de Mapas</h3>
-									<span>Emerson Schuede</span>
-									<div class="item-price">
-										<span class="prev-price">R$ 60.00</span>R$ 45.00
-									</div>
-								</div>
-							</figcaption>
-
-							<div class="product-item">
-								<figure class="product-style">
-									<img src="images/product-item8.jpg" alt="Books" class="product-item">
-									<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-								</figure>
-								<figcaption>
-									<h3>Livro de RPG</h3>
-									<span>Emerson Schuede</span>
-									<div class="item-price">
-										<span class="prev-price">$ 85.00</span>$ 60.00
-									</div>
-								</div>
-							</figcaption>
-
-							<div class="product-item">
-								<figure class="product-style">
-									<img src="images/product-item2.jpg" alt="Books" class="product-item">
-									<button type="button" class="add-to-cart" data-product-tile="add-to-cart">Compre Aqui</button>
-								</figure>
-								<figcaption>
-									<h3>Literatura do Equilibrium</h3>
-									<span>Emerson Schuede</span>
-									<div class="item-price">R$ 40.00</div>
-								</figcaption>
-							</div>
-						</div><!--grid-->
-					</div>
-				</div><!--inner-content-->
-			</div>
-		</div>
-	</section>
-
-	<section id="subscribe">
-		<div class="container">
-			<div class="row justify-content-center">
-
-				<div class="col-md-8">
-					<div class="row">
-
-						<div class="col-md-6">
-
-							<div class="title-element">
-								<h2 class="section-title divider">Viajantes do Mundo de Gatundo, se inscrevam na nossa miada!</h2>
-							</div>
-
-						</div>
-						<div class="col-md-6">
-
-							<div class="subscribe-content" data-aos="fade-up">
-								<p>O que é fragmentado, só pode ser lido com o coração atento e o espírito desperto.
-
-Cada passo ecoa uma linha. Cada escolha, um nó. Cada clã, um presságio.
-
-Sente-se junto ao fogo, ouça o vento sobre o sal... e leia o mundo como se fosse um pergaminho vivo.
-
-E lembrem-se: o Tear tece, mas são vocês que caminham..</p>
-								<form id="form">
-									<input type="text" name="email" placeholder="Insira seu email">
-									<button class="btn-subscribe">
-										<span>send</span>
-										<i class="icon icon-send"></i>
-									</button>
-								</form>
-							</div>
-
-						</div>
-
-					</div>
-				</div>
-
-			</div>
-		</div>
-	</section>
-
-	<section id="latest-blog" class="py-5 my-5">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-
-					<div class="section-header align-center">
-						<div class="title">
-							<span>Ultimas noticias</span>
-						</div>
-						<h2 class="section-title">Ultimos Artigos</h2>
-					</div>
-
-					<div class="row">
-
-						<div class="col-md-4">
-
-							<article class="column" data-aos="fade-up">
-
-								<figure>
-									<a href="#" class="image-hvr-effect">
-										<img src="images/post-img1.jpg" alt="post" class="post-image">
-									</a>
-								</figure>
-
-								<div class="post-item">
-									<div class="meta-date">2025</div>
-									<h3><a href="#">Como Jogar o Rpg de Gatundo?</a></h3>
-
-									<div class="links-element">
-										<div class="categories">RPG</div>
-										<div class="social-links">
-											<ul>
-												<li>
-													<a href="https://www.facebook.com/profile.php?id=61575019002011&sk=about"><i class="icon icon-facebook"></i></a>
-												</li>
-												<li>
-													<a href="https://www.instagram.com/gatundos/"><i class="icon icon-twitter"></i></a>
-												</li>
-												<li>
-													<a href="#"><i class="icon icon-behance-square"></i></a>
-												</li>
-											</ul>
-										</div>
-									</div><!--links-element-->
-
-								</div>
-							</article>
-
-						</div>
-						<div class="col-md-4">
-
-							<article class="column" data-aos="fade-up" data-aos-delay="200">
-								<figure>
-									<a href="#" class="image-hvr-effect">
-										<img src="images/post-img2.jpg" alt="post" class="post-image">
-									</a>
-								</figure>
-								<div class="post-item">
-									<div class="meta-date">Mar 29, 2021</div>
-									<h3><a href="#">Como Surgiu o mundo de GATUNDO!</a></h3>
-
-									<div class="links-element">
-										<div class="categories">Livro</div>
-										<div class="social-links">
-											<ul>
-												<li>
-													<a href="https://www.facebook.com/profile.php?id=61575019002011&sk=about"><i class="icon icon-facebook"></i></a>
-												</li>
-												<li>
-													<a href="https://www.instagram.com/gatundos/"><i class="icon icon-twitter"></i></a>
-												</li>
-												<li>
-													<a href="#"><i class="icon icon-behance-square"></i></a>
-												</li>
-											</ul>
-										</div>
-									</div><!--links-element-->
-
-								</div>
-							</article>
-
-						</div>
-						<div class="col-md-4">
-
-							<article class="column" data-aos="fade-up" data-aos-delay="400">
-								<figure>
-									<a href="#" class="image-hvr-effect">
-										<img src="images/post-img3.jpg" alt="post" class="post-image">
-									</a>
-								</figure>
-								<div class="post-item">
-									<div class="meta-date">2025</div>
-									<h3><a href="#">Agenda de Encontros </a></h3>
-
-									<div class="links-element">
-										<div class="categories">Mundo de GATUNDO</div>
-										<div class="social-links">
-											<ul>
-												<li>
-													<a href="https://www.facebook.com/profile.php?id=61575019002011&sk=about"><i class="icon icon-facebook"></i></a>
-												</li>
-												<li>
-													<a href="https://www.instagram.com/gatundos/"><i class="icon icon-twitter"></i></a>
-												</li>
-												<li>
-													<a href="#"><i class="icon icon-behance-square"></i></a>
-												</li>
-											</ul>
-										</div>
-									</div><!--links-element-->
-
-								</div>
-							</article>
-
-						</div>
-
-					</div>
-
-					<div class="row">
-
-						<div class="btn-wrap align-center">
-							<a href="#" class="btn btn-outline-accent btn-accent-arrow" tabindex="0">Veja outras postagens<i
-									class="icon icon-ns-arrow-right"></i></a>
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<section id="download-app" class="leaf-pattern-overlay">
-		<div class="corner-pattern-overlay"></div>
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-8">
-					<div class="row">
-
-						<div class="col-md-5">
-							<figure>
-								<img src="images/device.png" alt="phone" class="single-image">
-							</figure>
-						</div>
-
-						<div class="col-md-7">
-							<div class="app-info">
-								<h2 class="section-title divider">Baixe Nosso App !</h2>
-								<p>Sistemas de Jogo, Fichas de personagem, Sistema de batalha, campanhas, missões, clãs e muito mais</p>
-								<div class="google-app">
-									<img src="images/google-play.jpg" alt="google play">
-									<img src="images/app-store.jpg" alt="app store">
-								</div>
-							</div>
-						</div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<footer id="footer">
-		<div class="container">
-			<div class="row">
-
-				<div class="col-md-4">
-
-					<div class="footer-item">
-						<div class="company-brand">
-							<img src="images/main-logo1.png" alt="logo" class="footer-logo">
-							<p>Vivam as histórias destes peludos num mundo imaginário cheio de mistério e muita fofura
-.</p>
-						</div>
-					</div>
-
-				</div>
-
-				<div class="col-md-2">
-
-					<div class="footer-menu">
-						<h5>Sobre Nós</h5>
-						<ul class="menu-list">
-							<li class="menu-item">
-								<a href="#">Visão</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Artigos </a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Oportunidades</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Termos de Serviço</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Catarse</a>
-							</li>
-						</ul>
-					</div>
-
-				</div>
-				<div class="col-md-2">
-
-					<div class="footer-menu">
-						<h5>Discover</h5>
-						<ul class="menu-list">
-							<li class="menu-item">
-								<a href="#">Home</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Livros</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Autor</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Assuntos</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Busca Avançada</a>
-							</li>
-						</ul>
-					</div>
-
-				</div>
-				<div class="col-md-2">
-
-					<div class="footer-menu">
-						<h5>Minha Conta</h5>
-						<ul class="menu-list">
-							<li class="menu-item">
-								<a href="#">Login</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Carrinho</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Lista de Desejos</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Meus Pedidos</a>
-							</li>
-						</ul>
-					</div>
-
-				</div>
-				<div class="col-md-2">
-
-					<div class="footer-menu">
-						<h5>Ajuda</h5>
-						<ul class="menu-list">
-							<li class="menu-item">
-								<a href="#">Central de Ajuda</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Direcione um problema</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Sugira Edições</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Contate-nos</a>
-							</li>
-						</ul>
-					</div>
-
-				</div>
-
-			</div>
-			<!-- / row -->
-
-		</div>
-	</footer>
-
-	<div id="footer-bottom">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-
-					<div class="copyright">
-						<div class="row">
-
-							<div class="col-md-6">
-								<p>© 2025 All rights reserved.  @templatesjungle<a
-										href="" target="_blank"></a></p>
-							</div>
-
-							<div class="col-md-6">
-								<div class="social-links align-right">
-									<ul>
-										<li>
-											<a href="https://www.facebook.com/profile.php?id=61575019002011&sk=about"><i class="icon icon-facebook"></i></a>
-										</li>
-										<li>
-											<a href="https://www.instagram.com/gatundos/"><i class="icon icon-twitter"></i></a>
-										</li>
-										<li>
-											<a href="https://www.youtube.com/@GatundoSchuede"><i class="icon icon-youtube-play"></i></a>
-										</li>
-										<li>
-											<a href="#"><i class="icon icon-behance-square"></i></a>
-										</li>
-									</ul>
-								</div>
-							</div>
-
-						</div>
-					</div><!--grid-->
-
-				</div><!--footer-bottom-content-->
-			</div>
-		</div>
-	</div>
-
-	<script src="js/jquery-1.11.0.min.js"></script>
-	<script src=#"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-		integrity=#"sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-		crossorigin=#"anonymous"></script>
-	<script src="js/plugins.js"></script>
-	<script src="js/script.js"></script>
-
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">Gatundo</div>
+            <ul class="menu">
+                <li><a href="../index.html">🏠 Home</a></li>
+                <li><a href="/Pages/Lore.html">📚 Lore/Livros</a></li>
+                <li><a href="/Pages/Jogos.html">🎲 Jogos</a></li>
+                <li><a href="https://gatundos.lojavirtualnuvem.com.br/" target="_blank">🛒 Loja</a></li>
+                <li><a href="/Pages/Events.html">Eventos</a></li>
+                <li><a href="../admin/index.html">⚙️ Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+                <section class="intro">
+                    <img src="/images/main-banner1.jpg" alt="Cronologia Gatundo" class="historia-image">
+                        <h1 class="welcome-text"> Bem-vindo ao Mundo de Gatundo</h1>
+            <p class="subtext">Explore a lore, os jogos, personagens e clãs em um universo épico.</p>
+            
+        </section>
+
+<main class="container">
+        <!-- Hero História -->
+        <section class="historia-hero">
+                <img src="/images/CatBackground.png" alt="Cronologia Gatundo" class="historia-image">
+        </section>
+
+    
+        <!-- Banner Vermelho -->
+        <section class="banner-red">
+            <h2 class="banner-title">🐱 Gatundo é um mundo onde tudo tem alma:</h2>
+            <p class="banner-text">📖 Uma página esquecida pode mudar o destino de uma civilização.
+🔮 Um sonho sonhado por um gato pode se tornar um artefato real.
+💫 E até a menor criatura — até mesmo um inseto que canta sozinho no escuro — pode virar o fio que desfaz ou salva o mundo..</p>
+        </section>
+
+        <!-- Vídeo Explicativo Gatundo -->
+        <section class="video-section">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/gVow906gJl4?si=862Rvu1-DBM01doD" title="O que é Gatundo?"></iframe>
+            </div>
+        </section>
+
+        <!-- Cards Interativos -->
+        <section class="cards-grid">
+            <div class="card" data-modal="lore">
+                <h3>📜 Seção Lore</h3>
+                <p>Descubra a história ancestral, linhagens felinas e segredos do mundo Gatundo.</p>
+            </div>
+            <div class="card" data-modal="jogos">
+                <h3>🎲 Jogos</h3>
+                <p>RPG de mesa, board game digital e card battles.</p>
+            </div>
+            <div class="card" data-modal="clans">
+                <h3>🐱 Qual Clã Você Apoia?</h3>
+                <p>Miaulus, Patas Negras? Faça o quiz e descubra seu destino.</p>
+            </div>
+            <div class="card" data-modal="join">
+                <h3>👥 Junte-se ao Bando</h3>
+                <p>Entre na comunidade Discord, WhatsApp e eventos presenciais.</p>
+            </div>
+            <div class="card" data-modal="solo">
+                <h3>🎯 Teste sua sorte - Aventura Solo Grátis</h3>
+                <p>Jogue agora! Aventura interativa sem cadastro. 15min de pura emoção.</p>
+            </div>
+            <div class="card" data-modal="story">
+                <h3>✍️ Compartilhe Sua História</h3>
+                <p>Seu fanfic, arte ou teoria pode virar lore oficial. Poste agora!</p>
+            </div>
+            <div class="card" data-modal="support">
+                <h3>💰 Apoie a Revolução</h3>
+                <p>Catarse, Nuvemshop e merch exclusivo. Seu apoio constrói o futuro!</p>
+            </div>
+            <div class="card" data-modal="tabuleiro">
+                <h3>Jogue a versão Digital</h3>
+                <p>Totalmente interativa do board game. Monte seu clã e bata recordes!</p>
+            </div>
+             <div class="card" data-modal="9vida">
+                <h3>A 9ª Vida</h3>
+                <p>Novidades Felinas vem por aqui</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modais Pré-informações -->
+    <div id="modal-lore" class="modal-overlay">
+        <div class="modal">
+            <button class="close-modal" onclick="closeModal('lore')">&times;</button>
+            <h2>📜 Seção Lore</h2>
+            <div class="modal-content">
+                <p><strong>Gatundo:</strong> Mundo onde páginas ganham vida, sonhos felinos forjam artefatos e insetos cantores mudam destinos.</p>
+                <ul>
+                    <li>🌙 <strong>Era das Sombras:</strong> Gatos descobriram magia nas páginas esquecidas.</li>
+                    <li>⚔️ <strong>Clãs Rivais:</strong> Miaulus (ágil), Vales (resistente), Sombras (místico).</li>
+                    <li>📖 <strong>Livro Sagrado:</strong> Artefato que narra futuros alternativos.</li>
+                </ul>
+                <a href="pages/lore.html" style="color:#ffd700;">Explorar Completo →</a>
+                <img src="/images/post-img1.jpg" alt="Gatundo" class="historia-image">
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-jogos" class="modal-overlay">
+        <div class="modal">
+            <button class="close-modal" onclick="closeModal('jogos')">&times;</button>
+            <h2>🎲 Jogos Gatundo</h2>
+            <div class="modal-content">
+                <p>Multiformato: RPG mesa, board game digital, card battles.</p>
+                <ul>
+                    <li>🃏 <strong>Card Game:</strong> 50+ cartas únicas, batalhas clã vs clã.</li>
+                    <li>🎲 <strong>RPG:</strong> Sistema PbtA adaptado, one-shots 2h.</li>
+                    <li>📱 <strong>Digital:</strong> Solo e Multiplayer beta.</li>
+                    <img src="/images/Cat-Board.png" alt="Gatundo" class="historia-image">
+                </ul>
+                <a href="pages/jogos.html" style="color:#ffd700;">Visite →</a>
+            </div>
+        </div>
+    </div>
+  <div id="modal-clans" class="modal-overlay">
+        <div class="modal">
+            <button class="close-modal" onclick="closeModal('clans')">&times;</button>
+            <h2>Clãs de Gatundo</h2>
+            <div class="modal-content">
+                <p>Os reinos de Gatundo.</p>
+                <ul>
+                    <li>🐈‍⬛ <strong>Miaulus</strong> Felinos Incansaveis.</li>
+                    <li>🐾 <strong>Patas Negras</strong> Caninos Territorialistas Brutais</li>
+                    <li>🐶 <strong>Caramelos</strong> Caninos Diplomaticos.</li>
+                    <img src="/images/Clãs de Gatundo.png" alt="Gatundo" class="historia-image">
+                </ul>
+                <a href="pages/Lore.html" style="color:#ffd700;">Visite →</a>
+            </div>
+        </div>
+    </div>
+     <div id="modal-join" class="modal-overlay">
+        <div class="modal">
+            <button class="close-modal" onclick="closeModal('join')">&times;</button>
+            <h2>Faça parte da Comunidade de Gatundo</h2>
+            <div class="modal-content">
+                <p>Onde a aventura acontece.</p>
+                <ul>
+                    <li>🧑‍💻 <strong>Reino do Discord</strong> Campanhas, torneios e batalhas."link"</li>
+                    <li>🎮 <strong>Encontros Presenciais</strong> Campanhas, torneios e batalhas."link"</li>
+                    <li>📲 <strong>Reino Whatsapp</strong> Novidades e promoções unicas.</li>
+                    <img src="/images/Discord.jpg" alt="Gatundo" class="historia-image">
+                </ul>
+                <a href="pages/Lore.html" style="color:#ffd700;">Visite →</a>
+            </div>
+        </div>
+    </div>
+    <div id="modal-solo" class="modal-overlay">
+        <div class="modal">
+            <button class="close-modal" onclick="closeModal('solo')">&times;</button>
+            <h2>Aventura gratis</h2>
+            <div class="modal-content">
+                <p>A aventura acontece, para você e seu Gato</p>
+                <ul>
+                    <li>📚 <strong>Divirta-se </strong> Faça o download aqui "link"</li>
+                    <img src="/images/image.png" alt="Gatundo" class="historia-image">
+                    </ul>
+                <a href="pages/Lore.html" style="color:#ffd700;">Visite →</a>
+            </div>
+        </div>
+    </div>
+     <div id="modal-story" class="modal-overlay">
+        <div class="modal">
+            <button class="close-modal" onclick="closeModal('story')">&times;</button>
+            <h2>Conte a sua história</h2>
+            <div class="modal-content">
+                <p>🙋Você gostaria de ter seu Pet eternizado no mundo de Gatundo?😸😸</p>
+                <ul>
+                    <li><strong>Fale Conosco </strong> Clique Aqui "link"</li>
+                    <img src="/images/Encontro.png" alt="Gatundo" class="historia-image">
+                    </ul>
+                <a href="#" style="color:#ffd700;">Visite →</a>
+            </div>
+        </div>
+    </div>
+     <div id="modal-support" class="modal-overlay">
+        <div class="modal">
+            <button class="close-modal" onclick="closeModal('support')">&times;</button>
+            <h2>Junte-se a nós no Catarse</h2>
+            <div class="modal-content">
+                <p>Seu apoio ajuda o projeto e Ongs de animais</p>
+                <ul>
+                    <li><strong>Fale Conosco </strong> Clique Aqui "link"</li>
+                    <img src="/images/Catarse.png" alt="Gatundo" class="historia-image">
+                    </ul>
+                <a href="#" style="color:#ffd700;">Visite →</a>
+            </div>
+        </div>
+    </div>
+     <div id="modal-tabuleiro" class="modal-overlay">
+        <div class="modal">
+            <button class="close-modal" onclick="closeModal('tabuleiro')">&times;</button>
+            <h2>Jogue através da nossa plataforma e vivencie o mundo de GATUNDO!</h2>
+            <div class="modal-content">
+                <p>Campanhas, Batalhas e PVP UNICO</p>
+                <ul>
+                    <li><strong>Inscrição Beta </strong> Clique Aqui "link"</li>
+                    <li><strong>Assine aqui </strong> Clique Aqui "link"</li>
+                     <img src="/images/Catplay.png" alt="Gatundo" class="historia-image">
+                    </ul>
+                <a href="http://batalhagatundos.com.br/" style="color:#ffd700;">Visite →</a>
+            </div>
+        </div>
+    </div>
+    <!-- Repita estrutura para outros 7 modais... (jogos, clans, join, solo, story, support, tabuleiro) -->
+    <!-- Para economizar espaço, implemente o padrão acima copiando e alterando IDs/títulos/conteúdos -->
+
+    <script>
+        // Abrir Modal
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', () => {
+                const modalId = card.dataset.modal;
+                document.getElementById(`modal-${modalId}`).style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Fechar Modal
+        window.closeModal = function(modalId) {
+            document.getElementById(`modal-${modalId}`).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        };
+
+        // Fechar clicando fora
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal-overlay')) closeModal(overlay.id.split('-')[1]);
+            });
+        });
+
+        // Scroll suave para seções
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
 </body>
-
 </html>
