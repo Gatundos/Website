@@ -7,22 +7,42 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            font-family: 'Georgia', serif; 
-                        background: linear-gradient(135deg, #1a1a1a 0%, #2d1b00 50%, #4a2c0f 100%); 
+            font-family: 'Arial Black', Arial, sans-serif; 
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1b00 50%, #4a2c0f 100%); 
             color: #f2d492; 
             min-height: 100vh; 
             overflow-x: hidden;
             
         }
+      /* Header igual home */
         header { 
-            background: rgba(0,0,0,0.9); 
-            padding: 1rem 2rem; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            flex-wrap: wrap; 
-            box-shadow: 0 4px 20px rgba(242,122,82,0.3);
+            background: rgba(0,0,0,0.95); 
+            padding: 1rem 0; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            backdrop-filter: blur(20px);
         }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { 
+            font-size: 2.5rem; 
+            font-weight: 900; 
+            background: linear-gradient(45deg, #ffd700, #ff6b35); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            text-shadow: 0 0 30px rgba(255,215,0,0.5);
+        }
+        .menu { display: flex; gap: 2rem; list-style: none; }
+        .menu a { 
+            color: #fff; 
+            text-decoration: none; 
+            font-weight: bold; 
+            padding: 0.5rem 1rem; 
+            border-radius: 25px; 
+            transition: all 0.3s; 
+        }
+        .menu a:hover { background: #ffd700; color: #000; transform: scale(1.05); }
+        
         .logo { font-size: 2rem; font-weight: bold; color: #f2aa52; text-shadow: 2px 2px 4px #000; }
         nav a { color: #f2d492; text-decoration: none; margin: 0 1rem; font-size: 1.1rem; transition: color 0.3s; }
         nav a:hover { color: #f25430; }
@@ -90,14 +110,17 @@
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">Gatundo</div>
+     <header>
+        <nav class="container">
+            <div class="logo">Gatundo</div>
+            <ul class="menu">
                 <li><a href="../index.html">🏠 Home</a></li>
                 <li><a href="/Pages/Lore.html">📚 Lore/Livros</a></li>
                 <li><a href="/Pages/Jogos.html">🎲 Jogos</a></li>
                 <li><a href="https://gatundos.lojavirtualnuvem.com.br/" target="_blank">🛒 Loja</a></li>
                 <li><a href="/Pages/Events.html">Eventos</a></li>
-                <li><a href="../Painel/index.html">⚙️ Admin</a></li>
+            </ul>
+        </nav>
     </header>
    
     <section class="hero">

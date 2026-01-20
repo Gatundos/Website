@@ -309,7 +309,6 @@
                 <li><a href="/Pages/Jogos.html">🎲 Jogos</a></li>
                 <li><a href="https://gatundos.lojavirtualnuvem.com.br/" target="_blank">🛒 Loja</a></li>
                 <li><a href="/Pages/Events.html">Eventos</a></li>
-                <li><a href="../Painel/index.html">⚙️ Admin</a></li>
             </ul>
         </nav>
     </header>
@@ -393,8 +392,8 @@
                 <p><strong>Gatundo:</strong> Mundo onde páginas ganham vida, sonhos felinos forjam artefatos e insetos cantores mudam destinos.</p>
                 <ul>
                     <li>🌙 <strong>Era das Sombras:</strong> Gatos descobriram magia nas páginas esquecidas.</li>
-                    <li>⚔️ <strong>Clãs Rivais:</strong> Miaulus (ágil), Vales (resistente), Sombras (místico).</li>
-                    <li>📖 <strong>Livro Sagrado:</strong> Artefato que narra futuros alternativos.</li>
+                    <li>⚔️ <strong>Clãs Rivais:</strong> Miaulus (ágil), Patas Negras (resistente), Caramelos (místico).</li>
+                    <li>📖 <strong>Livro Sagrado:</strong> Artefato que narra o passado, presente e futudo de um mundo mágico.</li>
                 </ul>
                 <a href="pages/lore.html" style="color:#ffd700;">Explorar Completo →</a>
                 <img src="/images/post-img1.jpg" alt="Gatundo" class="historia-image">
@@ -541,85 +540,4 @@
             });
         });
     </script>
-</body>
-</html>
-    <title>Admin Gatundo</title>
-    <style>
-        body { font-family: Arial; background: #1a0a2e; color: #fff; padding: 20px; }
-        .form-group { margin-bottom: 20px; }
-        input, textarea, button { width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc; }
-        #panels-list { display: flex; flex-direction: column; gap: 10px; }
-        .panel-item { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 5px; }
-        button { background: #ffd700; color: #000; cursor: pointer; }
-        #login { text-align: center; }
-    </style>
-</head>
-<body>
-    <div id="login">
-        <h2>Login Admin</h2>
-        <input type="password" id="password" placeholder="Senha">
-        <button onclick="checkLogin()">Entrar</button>
-    </div>
-    <div id="admin-panel" style="display:none;">
-        <h2>Painel Admin</h2>
-        <div id="panels-list"></div>
-        <button onclick="addPanel()">+ Novo Painel</button>
-        <button onclick="saveAndBack()">Salvar e Voltar ao Site</button>
-    </div>
-    <script>
-        const PASSWORD = 'suasenha123';
-        let config = JSON.parse(localStorage.getItem('gatundoConfig')) || window.parent.config || { panels: [] };
-        
-        function checkLogin() {
-            if (document.getElementById('password').value === PASSWORD) {
-                document.getElementById('login').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'block';
-                renderAdminPanels();
-            } else alert('Senha incorreta');
-        }
-        
-        function renderAdminPanels() {
-            const container = document.getElementById('panels-list');
-            container.innerHTML = config.panels.map((panel, index) => `
-                <div class="panel-item">
-                    <input value="${panel.title}" onchange="config.panels[${index}].title=this.value">
-                    <textarea rows="3" onchange="config.panels[${index}].text=this.value">${panel.text}</textarea>
-                    <input type="file" accept="image/*" onchange="loadImage(this, ${index})">
-                    <img src="${panel.img}" style="width:100px;height:100px;object-fit:cover;">
-                    <input value="${panel.link}" onchange="config.panels[${index}].link=this.value">
-                    <button onclick="config.panels.splice(${index},1);renderAdminPanels()">Excluir</button>
-                    <button onclick="movePanel(${index}, -1)">↑</button><button onclick="movePanel(${index}, 1)">↓</button>
-                </div>
-            `).join('');
-        }
-        
-        function loadImage(input, index) {
-            const reader = new FileReader();
-            reader.onload = e => {
-                config.panels[index].img = e.target.result;
-                renderAdminPanels();
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-        
-        function addPanel() {
-            config.panels.push({ id: 'new', title: '', text: '', img: '', link: '' });
-            renderAdminPanels();
-        }
-        
-        function movePanel(index, dir) {
-            const newIndex = index + dir;
-            if (newIndex >= 0 && newIndex < config.panels.length) {
-                [config.panels[index], config.panels[newIndex]] = [config.panels[newIndex], config.panels[index]];
-                renderAdminPanels();
-            }
-        }
-        
-        function saveAndBack() {
-            localStorage.setItem('gatundoConfig', JSON.stringify(config));
-            if (window.parent.saveConfig) window.parent.saveConfig(config);
-            window.location.href = '../index.html';
-        }
-    </script>
-</body>
-</html>
+    </html>
