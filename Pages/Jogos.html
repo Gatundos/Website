@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gatundo - Reinos Medievais</title>
+    <title>Gatundo - Reinos Medievais e Jogos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --dark-purple: #261126;
@@ -25,148 +26,119 @@
             color: var(--gold-light);
             line-height: 1.6;
             overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 0 20px; 
         }
 
         /* Header */
         header { 
-            background: rgba(0,0,0,0.95); 
+            background: rgba(0, 0, 0, 0.95); 
             padding: 1rem 0; 
             position: sticky; 
             top: 0; 
             z-index: 100; 
             backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--gold-medium);
         }
-        nav { display: flex; justify-content: space-between; align-items: center; }
+        
+        nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+
         .logo { 
-            font-size: 2.5rem; 
-            font-weight: 900; 
-            background: linear-gradient(45deg, #ffd700, #ff6b35); 
+            font-size: 2.2rem; 
+            font-weight: 700; 
+            background: linear-gradient(45deg, var(--gold-light), var(--gold-medium), var(--fire-red)); 
             -webkit-background-clip: text; 
+            background-clip: text;
             -webkit-text-fill-color: transparent; 
-            text-shadow: 0 0 30px rgba(255,215,0,0.5);
+            text-shadow: 0 0 20px rgba(242, 226, 141, 0.5);
         }
-        .menu { display: flex; gap: 2rem; list-style: none; }
+
+        .menu { 
+            display: flex; 
+            gap: 2rem; 
+            list-style: none; 
+        }
+
         .menu a { 
-            color: #fff; 
+            color: var(--gold-light); 
             text-decoration: none; 
-            font-weight: bold; 
+            font-weight: 600; 
             padding: 0.5rem 1rem; 
             border-radius: 25px; 
             transition: all 0.3s; 
         }
-        .menu a:hover { background: #ffd700; color: #000; transform: scale(1.05); }
-        
-        /* Intro Centralizada */
-        .intro { 
-            text-align: center; 
-            padding: 4rem 2rem; 
-            position: relative;
-        }
-        .main-logo { 
-            max-width: 400px; 
-            max-height: 250px; 
-            width: 100%; 
-            height: auto; 
-            margin-bottom: 2rem; 
-            filter: drop-shadow(0 20px 40px rgba(255,107,53,0.5));
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-        @keyframes glow {
-            from { filter: drop-shadow(0 20px 40px rgba(255,107,53,0.5)); }
-            to { filter: drop-shadow(0 30px 60px rgba(255,215,0,0.8)); }
-        }
-        .welcome-text { 
-            font-size: 2.5rem; 
-            margin-bottom: 1rem; 
-            background: linear-gradient(45deg, #fff, #ffd700); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(255,255,255,0.3);
-        }
-        .subtext { font-size: 1.3rem; opacity: 0.9; margin-bottom: 3rem; }
 
-        .logo {
-            font-size: 2.2rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, var(--gold-light), var(--gold-medium), var(--fire-red));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(242, 226, 141, 0.5);
+        .menu a:hover { 
+            background: var(--gold-medium); 
+            color: var(--dark-purple); 
+            transform: scale(1.05); 
+            box-shadow: 0 5px 15px rgba(242, 170, 82, 0.4);
         }
 
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2.5rem;
-        }
-
-        .nav-menu a {
-            color: var(--gold-light);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1.1rem;
-            transition: all 0.4s ease;
-            position: relative;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-        }
-
-        .nav-menu a:hover {
-            color: var(--fire-red);
-            background: rgba(242, 170, 82, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(217, 56, 41, 0.4);
-        }
-
+        /* Hero Section */
         .hero {
-            height: 100vh;
-            background: linear-gradient(rgba(38,17,38,0.8), rgba(140,91,73,0.6)), 
-                        url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQIBAQEBAQIBAQECAgICAgICAgIDAwQDAwMDAwIDA...') center/cover; /* Imagem compactada da anexo */
+            min-height: 90vh;
+            background: linear-gradient(rgba(38, 17, 38, 0.85), rgba(140, 91, 73, 0.7)), 
+                        url('/images/main-banner1.jpg') center/cover;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             position: relative;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle, rgba(242,170,82,0.3) 0%, transparent 70%);
-            pointer-events: none;
+            padding: 4rem 2rem;
         }
 
         .hero-content {
             position: relative;
             z-index: 2;
             max-width: 800px;
-            padding: 0 2rem;
         }
 
         .hero h1 {
-            font-size: clamp(3rem, 8vw, 6rem);
+            font-size: clamp(2.5rem, 6vw, 5rem);
             margin-bottom: 1.5rem;
             text-shadow: 3px 3px 0 var(--dark-purple), 0 0 30px var(--gold-medium);
+            color: var(--gold-light);
         }
 
         .hero p {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            opacity: 0.95;
+        }
+
+        .subtext { 
+            font-size: 1.1rem; 
+            opacity: 0.85; 
+            margin-bottom: 2.5rem; 
+        }
+
+        .hero-banner-img {
+            max-width: 100%;
+            max-height: 350px;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 3px solid var(--gold-medium);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
             margin-bottom: 2rem;
-            opacity: 0.9;
         }
 
         .cta-button {
             display: inline-block;
             background: linear-gradient(45deg, var(--fire-red), var(--gold-medium));
             color: var(--dark-purple);
-            padding: 1.2rem 3rem;
-            font-size: 1.3rem;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
             font-weight: bold;
             text-decoration: none;
             border-radius: 50px;
@@ -174,6 +146,8 @@
             box-shadow: 0 10px 30px rgba(217, 56, 41, 0.4);
             position: relative;
             overflow: hidden;
+            border: none;
+            cursor: pointer;
         }
 
         .cta-button::before {
@@ -187,24 +161,24 @@
             transition: left 0.5s;
         }
 
-        .cta-button:hover::before {
-            left: 100%;
-        }
+        .cta-button:hover::before { left: 100%; }
 
         .cta-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(217, 56, 41, 0.6);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(217, 56, 41, 0.6);
+            color: #fff;
         }
 
+        /* Seção de Jogos */
         .games-section {
-            padding: 8rem 2rem 4rem;
+            padding: 5rem 2rem;
             max-width: 1400px;
             margin: 0 auto;
         }
 
         .section-title {
             text-align: center;
-            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
             margin-bottom: 4rem;
             background: linear-gradient(45deg, var(--gold-light), var(--gold-medium));
             -webkit-background-clip: text;
@@ -214,36 +188,23 @@
 
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-
-        .dice {
-            position: absolute;
-            top: 10%;
-            left: 5%;
-            font-size: 4rem;
-            color: var(--gold-medium);
-            animation: roll 3s infinite linear;
-            text-shadow: 0 0 20px var(--gold-medium);
-        }
-
-        @keyframes roll {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
         }
 
         .game-card {
-            background: rgba(38, 17, 38, 0.9);
-            border: 3px solid var(--gold-medium);
+            background: rgba(38, 17, 38, 0.92);
+            border: 2px solid var(--gold-medium);
             border-radius: 20px;
-            padding: 2rem;
+            padding: 2.5rem 1.5rem 2rem;
             text-align: center;
             transition: all 0.4s ease;
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
         }
 
         .game-card::before {
@@ -253,109 +214,108 @@
             left: 0;
             right: 0;
             height: 5px;
+            border-radius: 20px 20px 0 0;
             background: linear-gradient(90deg, var(--fire-red), var(--gold-medium), var(--fire-red));
         }
 
         .game-card:hover {
-            transform: translateY(-15px) scale(1.05);
-            box-shadow: 0 25px 60px rgba(217, 56, 41, 0.4);
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(217, 56, 41, 0.35);
             border-color: var(--fire-red);
         }
 
         .game-number {
             position: absolute;
-            top: -15px;
+            top: -20px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--fire-red);
             color: var(--gold-light);
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             box-shadow: 0 5px 15px rgba(217, 56, 41, 0.6);
+            border: 2px solid var(--gold-medium);
+        }
+
+        .game-image {
+            width: 100%;
+            max-width: 250px;
+            height: 250px;
+            object-fit: contain;
+            margin: 1rem auto;
+            border-radius: 12px;
+            transition: transform 0.3s;
+        }
+
+        .game-card:hover .game-image {
+            transform: scale(1.04);
         }
 
         .game-title {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
+            font-size: 1.6rem;
+            margin: 0.8rem 0;
             color: var(--gold-medium);
         }
 
-        .play-button {
-            background: linear-gradient(45deg, var(--gold-medium), var(--fire-red));
-            color: var(--dark-purple);
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1rem;
-        }
-
-        .play-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 10px 25px rgba(242, 170, 82, 0.5);
+        .game-description {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
         }
 
         footer {
             background: var(--dark-purple);
             text-align: center;
-            padding: 3rem 2rem;
-            border-top: 5px solid var(--gold-medium);
+            padding: 2.5rem 2rem;
+            border-top: 4px solid var(--gold-medium);
+            font-size: 0.95rem;
         }
 
-        /* Responsivo */
+        /* Responsividade */
         @media (max-width: 768px) {
-            .nav-menu {
-                display: none;
+            nav {
+                flex-direction: column;
+                gap: 1rem;
             }
-            
-            .hero h1 {
-                font-size: 2.5rem;
+            .menu {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.8rem;
             }
-            
             .games-grid {
                 grid-template-columns: 1fr;
-                gap: 1.5rem;
             }
-        }
-
-        @media (max-width: 480px) {
-            header {
-                padding: 1rem;
-            }
-            
             .hero {
                 padding: 2rem 1rem;
             }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-       <header>
+
+    <header>
         <nav class="container">
             <div class="logo">Gatundo</div>
             <ul class="menu">
                 <li><a href="../index.html">🏠 Home</a></li>
                 <li><a href="/Pages/Lore.html">📚 Lore/Livros</a></li>
                 <li><a href="/Pages/Jogos.html">🎲 Jogos</a></li>
-                <li><a href="https://gatundos.lojavirtualnuvem.com.br/" target="_blank">🛒 Loja</a></li>
-                <li><a href="/Pages/Events.html">Eventos</a></li>
+                <li><a href="https://gatundos.lojavirtualnuvem.com.br/" target="_blank" rel="noopener">🛒 Loja</a></li>
+                <li><a href="/Pages/Events.html">📅 Eventos</a></li>
             </ul>
         </nav>
     </header>
-        <section class="hero" id="home">
-        <div class="dice">🎲</div>
+
+    <section class="hero" id="home">
         <div class="hero-content">
-            <img src="/images/main-banner1.jpg" alt="Cronologia Gatundo" class="historia-image">
+            <img src="/images/main-banner1.jpg" alt="Cronologia Gatundo" class="hero-banner-img">
             <h1>Reinos de Gatundo</h1>
             <p>Entre no mundo medieval dos jogos de tabuleiro. Escolha sua aventura e conquiste territórios lendários!</p>
             <p class="subtext">Explore a lore, os jogos, personagens e clãs em um universo épico.</p>
@@ -364,63 +324,82 @@
     </section>
 
     <section class="games-section" id="jogos">
-        <h2 class="section-title">Escolha Sua aventura</h2>
+        <h2 class="section-title">Escolha Sua Aventura</h2>
+        
         <div class="games-grid">
+            
+            <!-- Jogo 1 -->
             <div class="game-card">
                 <div class="game-number">1</div>
-                <img src="/images/Patadas Instintivas3.png" width="200" height="300"alt="Cronologia Gatundo" class="historia-image">
-                <h3 class="game-title">Patadas Instintivas</h3>
-                <p>CardGame de Batalha rapida com até 6 amigos, reações rápidas, diversão garantida</p>
-                <a href="#jogos" class="cta-button">Comprar</a>
+                <img src="/images/Patadas Instintivas3.png" alt="Patadas Instintivas Card Game" class="game-image">
+                <div>
+                    <h3 class="game-title">Patadas Instintivas</h3>
+                    <p class="game-description">CardGame de batalha rápida com até 6 amigos. Reações rápidas e diversão garantida!</p>
+                </div>
+                <a href="https://gatundos.lojavirtualnuvem.com.br/" target="_blank" rel="noopener" class="cta-button">Comprar</a>
             </div>
+
+            <!-- Jogo 2 -->
             <div class="game-card">
                 <div class="game-number">2</div>
-                <img src="/images/BatalhaGAt.png" width="300" height="300 alt="Cronologia Gatundo" class="historia-image">
-                <h3 class="game-title">Batlha de Gatundos</h3>
-                <p>Jogo de tabuleiro e Cartas com até 6 amigos, chame os Heróis de gatundo para sua aventura</p>
-                <a href="#jogos" class="cta-button">Comprar</a>
+                <img src="/images/BatalhaGAt.png" alt="Batalha de Gatundos Boardgame" class="game-image">
+                <div>
+                    <h3 class="game-title">Batalha de Gatundos</h3>
+                    <p class="game-description">Jogo de tabuleiro e cartas para até 6 jogadores. Chame os heróis de Gatundo para a sua aventura!</p>
+                </div>
+                <a href="https://gatundos.lojavirtualnuvem.com.br/" target="_blank" rel="noopener" class="cta-button">Comprar</a>
             </div>
+
+            <!-- Jogo 3 -->
             <div class="game-card">
                 <div class="game-number">3</div>
-                <img src="/images/Batalha de Clã.png" width="300" height="300 alt="Cronologia Gatundo" class="historia-image">
-                <h3 class="game-title">MeowLex</h3>
-                <p>Jogue com os clãs, faça alianças gerencie o mundo de Gatundo .</p>
-                <a href="#jogos" class="cta-button">Comprar</a>
+                <img src="/images/Batalha de Clã.png" alt="MeowLex" class="game-image">
+                <div>
+                    <h3 class="game-title">MeowLex</h3>
+                    <p class="game-description">Jogue com os clãs, faça alianças e gerencie o ecossistema geopolítico do mundo de Gatundo.</p>
+                </div>
+                <a href="https://gatundos.lojavirtualnuvem.com.br/" target="_blank" rel="noopener" class="cta-button">Comprar</a>
             </div>
-            <div class="game-card">
-                <div class="game-number">3</div>
-                <h3 class="game-title">O Reino das Garras- Gatundo RPG</h3>
-                <img src="/images/Reino das Garras.png" width="300" height="300 alt="Cronologia Gatundo" class="historia-image">
-                <p>Mergulhe nas profundezas mágicas e desvende os segredos dos magos ancestrais.</p>
-                <p>Jogo completo com Tabuleiro, miniaturas, cards, Livro do jogador e Livro do Mestre</p>
-                <a href="#jogos" class="cta-button">Comprar</a>
-            </div>
+
+            <!-- Jogo 4 -->
             <div class="game-card">
                 <div class="game-number">4</div>
-                <img src="/images/CyberBat.png" width="300" height="300 alt="Cronologia Gatundo" class="historia-image">
-                <h3 class="game-title">Batalha de Gatundos Digital</h3>
-                <p>Tenha acesso a nossa plataforma, onde você pode jogar</p>
-                <a href="#jogos" class="cta-button">Assine</a>
+                <img src="/images/Reino das Garras.png" alt="Reino das Garras RPG" class="game-image">
+                <div>
+                    <h3 class="game-title">O Reino das Garras (RPG)</h3>
+                    <p class="game-description">Mergulhe nas profundezas mágicas! Jogo completo com tabuleiro, miniaturas, cards, Livro do Jogador e do Mestre.</p>
+                </div>
+                <a href="https://gatundos.lojavirtualnuvem.com.br/" target="_blank" rel="noopener" class="cta-button">Comprar</a>
             </div>
+
+            <!-- Jogo 5 -->
             <div class="game-card">
                 <div class="game-number">5</div>
-                <img src="/images/Portal Jogo.png" width="300" height="300 alt="Cronologia Gatundo" class="historia-image">
-                <h3 class="game-title">Acesse Batalha de Gatundos Digital</h3>
-                <p>Venha jogar</p>
-                <a href="#jogos" class="cta-button">Jogue</a>
+                <img src="/images/CyberBat.png" alt="Plataforma Digital Beta" class="game-image">
+                <div>
+                    <h3 class="game-title">Batalha de Gatundos Digital</h3>
+                    <p class="game-description">Tenha acesso exclusivo à nossa plataforma online para jogar partidas multiplayer remotas.</p>
+                </div>
+                <a href="http://batalhagatundos.com.br/" target="_blank" rel="noopener" class="cta-button">Assine</a>
             </div>
-             <!--div class="game-card">
+
+            <!-- Jogo 6 -->
+            <div class="game-card">
                 <div class="game-number">6</div>
-                <h3 class="game-title">Jogo 6</h3>
-                <p>Una as tribos bárbaras e lidere a grande invasão ao coração do império.</p>
-                <a href="#jogos" class="cta-button">Comprar</a>
-            </div-->
+                <img src="/images/Portal Jogo.png" alt="Portal do Jogo" class="game-image">
+                <div>
+                    <h3 class="game-title">Portal de Jogos Web</h3>
+                    <p class="game-description">Acesse diretamente o servidor e venha batalhar agora mesmo pelo seu navegador!</p>
+                </div>
+                <a href="http://batalhagatundos.com.br/" target="_blank" rel="noopener" class="cta-button">Jogue Agora</a>
+            </div>
+
         </div>
-        
     </section>
 
     <footer>
-        <p>&copy; 2026 Gatundo - Todos os direitos reservados, inclusive dos reinos medievais. 🏰</p>
+        <p>&copy; 2026 Gatundo - Todos os direitos reservados. 🏰</p>
     </footer>
+
 </body>
 </html>

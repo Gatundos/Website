@@ -3,8 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gatundo</title>
+    <title>Gatundo - Universo Mágico de Fantasia</title>
     <style>
+        /* Variáveis de Cor Otimizadas */
+        :root {
+            --accent-gold: #ffd700;
+            --accent-orange: #ff6b35;
+            --accent-red1: #ff4500;
+            --accent-red2: #dc143c;
+            --bg-dark: #0a0a0a;
+            --bg-card: rgba(255, 255, 255, 0.05);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Arial Black', Arial, sans-serif; 
@@ -28,7 +38,7 @@
         .logo { 
             font-size: 2.5rem; 
             font-weight: 900; 
-            background: linear-gradient(45deg, #ffd700, #ff6b35); 
+            background: linear-gradient(45deg, var(--accent-gold), var(--accent-orange)); 
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent; 
             text-shadow: 0 0 30px rgba(255,215,0,0.5);
@@ -42,59 +52,77 @@
             border-radius: 25px; 
             transition: all 0.3s; 
         }
-        .menu a:hover { background: #ffd700; color: #000; transform: scale(1.05); }
+        .menu a:hover { background: var(--accent-gold); color: #000; transform: scale(1.05); }
         
         /* Intro Centralizada */
         .intro { 
             text-align: center; 
-            padding: 4rem 2rem; 
+            padding: 4rem 2rem 2rem; 
             position: relative;
-        }
-        .main-logo { 
-            max-width: 400px; 
-            max-height: 250px; 
-            width: 100%; 
-            height: auto; 
-            margin-bottom: 2rem; 
-            filter: drop-shadow(0 20px 40px rgba(255,107,53,0.5));
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-        @keyframes glow {
-            from { filter: drop-shadow(0 20px 40px rgba(255,107,53,0.5)); }
-            to { filter: drop-shadow(0 30px 60px rgba(255,215,0,0.8)); }
         }
         .welcome-text { 
             font-size: 2.5rem; 
             margin-bottom: 1rem; 
-            background: linear-gradient(45deg, #fff, #ffd700); 
+            background: linear-gradient(45deg, #fff, var(--accent-gold)); 
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 20px rgba(255,255,255,0.3);
         }
-        .subtext { font-size: 1.3rem; opacity: 0.9; margin-bottom: 3rem; }
+        .subtext { font-size: 1.3rem; opacity: 0.9; margin-bottom: 2rem; }
         
+        /* Hero História */
+        .historia-hero { 
+            text-align: center; 
+            padding: 2rem; 
+            position: relative;
+        }
+        .historia-title { 
+            font-size: 3rem; 
+            margin-bottom: 1.5rem; 
+            background: linear-gradient(45deg, var(--accent-gold), var(--accent-orange), var(--accent-red1)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            animation: pulseGlow 2.5s ease-in-out infinite alternate;
+        }
+        @keyframes pulseGlow {
+            from { filter: drop-shadow(0 0 20px rgba(242,170,82,0.6)) brightness(1); }
+            to { filter: drop-shadow(0 0 40px rgba(242,127,61,1)) brightness(1.1); }
+        }
+        .historia-image { 
+            max-width: 100%; 
+            height: auto; 
+            max-height: 450px;
+            object-fit: cover; 
+            border-radius: 25px; 
+            box-shadow: 0 30px 60px rgba(242,62,46,0.4); 
+            margin: 1.5rem 0;
+            border: 4px solid var(--accent-red2);
+            transition: transform 0.5s;
+        }
+        .historia-image:hover { transform: scale(1.02); }
+
         /* Banner Vermelho */
         .banner-red { 
-            background: linear-gradient(135deg, #8b0000, #dc143c, #ff4500); 
+            background: linear-gradient(135deg, #8b0000, var(--accent-red2), var(--accent-red1)); 
             padding: 2rem; 
             margin: 2rem 0; 
             border-radius: 20px; 
             text-align: center; 
             box-shadow: 0 20px 40px rgba(139,0,0,0.6);
-            animation: pulse 2s infinite;
+            animation: pulse 3s infinite;
         }
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
+            50% { transform: scale(1.01); }
         }
-        .banner-title { font-size: 2.2rem; margin-bottom: 1rem; font-weight: 900; }
-        .banner-text { font-size: 1.2rem; }
+        .banner-title { font-size: 2rem; margin-bottom: 1rem; font-weight: 900; }
+        .banner-text { font-size: 1.1rem; line-height: 1.6; white-space: pre-line; }
         
         /* Vídeo Explicativo */
         .video-section { 
             display: flex; 
             justify-content: center; 
-            margin: 4rem 0; 
+            margin: 3rem 0; 
             padding: 2rem; 
             background: rgba(0,0,0,0.5); 
             border-radius: 25px; 
@@ -115,24 +143,27 @@
             border: none; 
         }
         
-        /* Cards Interativos Bottom */
+        /* Cards Interativos */
         .cards-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
             gap: 2rem; 
-            padding: 4rem 0; 
+            padding: 2rem 0 4rem; 
         }
         .card { 
-            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(0,0,0,0.5)); 
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(0,0,0,0.6)); 
             border: 2px solid rgba(255,215,0,0.3); 
             border-radius: 20px; 
-            padding: 2.5rem 2rem; 
+            padding: 2rem; 
             text-align: center; 
             cursor: pointer; 
             transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94); 
             backdrop-filter: blur(15px); 
             position: relative; 
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .card::before { 
             content: ''; 
@@ -141,24 +172,38 @@
             left: -100%; 
             width: 100%; 
             height: 100%; 
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); 
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); 
             transition: 0.6s; 
         }
         .card:hover::before { left: 100%; }
         .card:hover { 
-            transform: translateY(-15px) scale(1.05); 
-            border-color: #ffd700; 
-            box-shadow: 0 30px 60px rgba(255,215,0,0.4); 
+            transform: translateY(-10px) scale(1.02); 
+            border-color: var(--accent-gold); 
+            box-shadow: 0 20px 40px rgba(255,215,0,0.3); 
         }
         .card h3 { 
-            font-size: 1.8rem; 
+            font-size: 1.6rem; 
             margin-bottom: 1rem; 
-            background: linear-gradient(45deg, #ffd700, #fff); 
+            background: linear-gradient(45deg, var(--accent-gold), #fff); 
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent;
         }
-        .card p { opacity: 0.9; line-height: 1.6; }
+        .card p { opacity: 0.9; line-height: 1.5; font-size: 0.95rem; }
         
+        /* Botões Call To Action */
+        .cta-button {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.6rem 1.5rem;
+            background: var(--accent-gold);
+            color: #000;
+            font-weight: bold;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .cta-button:hover { background: #fff; transform: scale(1.05); }
+
         /* Modal Overlay */
         .modal-overlay { 
             display: none; 
@@ -169,35 +214,38 @@
             backdrop-filter: blur(10px); 
             align-items: center; 
             justify-content: center; 
-            animation: fadeIn 0.3s; 
+            animation: fadeIn 0.3s forwards; 
         }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .modal { 
             background: linear-gradient(145deg, #1a0a1a, #2d1a2d); 
-            border: 3px solid #ffd700; 
+            border: 2px solid var(--accent-gold); 
             border-radius: 25px; 
-            max-width: 90vw; 
-            max-height: 90vh; 
-            padding: 3rem; 
+            width: 90%;
+            max-width: 650px; 
+            max-height: 85vh; 
+            padding: 2.5rem; 
             overflow-y: auto; 
             position: relative; 
-            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.9);
             animation: modalSlide 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
         }
         @keyframes modalSlide {
-            from { transform: scale(0.7) translateY(50px); opacity: 0; }
+            from { transform: scale(0.8) translateY(30px); opacity: 0; }
             to { transform: scale(1) translateY(0); opacity: 1; }
         }
-        .modal h2 { color: #ffd700; margin-bottom: 1.5rem; font-size: 2.5rem; text-align: center; }
-        .modal-content { line-height: 1.7; font-size: 1.1rem; }
+        .modal h2 { color: var(--accent-gold); margin-bottom: 1.5rem; font-size: 2rem; text-align: center; }
+        .modal-content { line-height: 1.7; font-size: 1rem; }
+        .modal-content ul { margin: 1rem 0; padding-left: 1.2rem; }
+        .modal-content li { margin-bottom: 0.5rem; }
         .close-modal { 
             position: absolute; 
-            top: 1.5rem; 
-            right: 2rem; 
+            top: 1rem; 
+            right: 1.5rem; 
             background: none; 
             border: none; 
-            font-size: 2.5rem; 
-            color: #ffd700; 
+            font-size: 2.2rem; 
+            color: var(--accent-gold); 
             cursor: pointer; 
             width: 40px; 
             height: 40px; 
@@ -207,99 +255,22 @@
             border-radius: 50%; 
             transition: 0.3s;
         }
-        .close-modal:hover { background: rgba(255,215,0,0.3); transform: rotate(90deg); }
+        .close-modal:hover { background: rgba(255,215,0,0.2); transform: rotate(90deg); }
         
         /* Responsivo */
         @media (max-width: 768px) {
+            nav { flex-direction: column; gap: 1rem; }
             .logo { font-size: 2rem; }
-            .menu { flex-direction: column; gap: 1rem; }
-            .welcome-text { font-size: 2rem; }
-            .cards-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-            .modal { padding: 2rem 1.5rem; margin: 1rem; }
+            .menu { flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+            .welcome-text { font-size: 1.8rem; }
+            .historia-title { font-size: 2.2rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .modal { padding: 1.5rem; }
         }
-
-        /* Hero História */
-        .historia-hero { 
-            text-align: center; 
-            padding: 5rem 2rem; 
-            position: relative;
-            background: linear-gradient(135deg, rgba(35,47,64,0.8), rgba(15,25,37,0.8));
-        }
-        .historia-title { 
-            font-size: 4rem; 
-            margin-bottom: 2.5rem; 
-            background: linear-gradient(45deg, var(--accent-gold), var(--accent-orange), var(--accent-red1)); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 50px rgba(242,170,82,0.8);
-            animation: pulseGlow 2.5s ease-in-out infinite alternate;
-        }
-        @keyframes pulseGlow {
-            from { 
-                filter: drop-shadow(0 0 30px rgba(242,170,82,0.6)) brightness(1); 
-            }
-            to { 
-                filter: drop-shadow(0 0 60px rgba(242,127,61,1)) brightness(1.1); 
-            }
-        }
-        .historia-subtitle { 
-            font-size: 1.6rem; 
-            opacity: 0.95; 
-            margin-bottom: 1rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .historia-image { 
-            max-width: 100%; 
-            height: 450px; 
-            object-fit: cover; 
-            border-radius: 35px; 
-            box-shadow: 0 50px 100px rgba(242,62,46,0.6); 
-            margin: 3rem 0;
-            border: 5px solid var(--accent-red2);
-            transition: transform 0.5s;
-        }
-        .historia-image:hover { transform: scale(1.02); }
-         .historia-title { 
-            font-size: 4rem; 
-            margin-bottom: 2.5rem; 
-            background: linear-gradient(45deg, var(--accent-gold), var(--accent-orange), var(--accent-red1)); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 50px rgba(242,170,82,0.8);
-            animation: pulseGlow 2.5s ease-in-out infinite alternate;
-        }
-        @keyframes pulseGlow {
-            from { 
-                filter: drop-shadow(0 0 30px rgba(242,170,82,0.6)) brightness(1); 
-            }
-            to { 
-                filter: drop-shadow(0 0 60px rgba(242,127,61,1)) brightness(1.1); 
-            }
-        }
-        .historia-subtitle { 
-            font-size: 1.6rem; 
-            opacity: 0.95; 
-            margin-bottom: 1rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .historia-image { 
-            max-width: 100%; 
-            height: 450px; 
-            object-fit: cover; 
-            border-radius: 35px; 
-            box-shadow: 0 50px 100px rgba(242,62,46,0.6); 
-            margin: 3rem 0;
-            border: 5px solid var(--accent-red2);
-            transition: transform 0.5s;
-        }
-        .historia-image:hover { transform: scale(1.02); }
     </style>
 </head>
 <body>
+
     <header>
         <nav class="container">
             <div class="logo">Gatundo</div>
@@ -307,86 +278,87 @@
                 <li><a href="../index.html">🏠 Home</a></li>
                 <li><a href="/Pages/Lore.html">📚 Lore/Livros</a></li>
                 <li><a href="/Pages/Jogos.html">🎲 Jogos</a></li>
-                <li><a href="https://gatundos.lojavirtualnuvem.com.br/" target="_blank">🛒 Loja</a></li>
-                <li><a href="/Pages/Events.html">Eventos</a></li>
+                <li><a href="https://gatundos.lojavirtualnuvem.com.br/" target="_blank" rel="noopener">🛒 Loja</a></li>
+                <li><a href="/Pages/Events.html">📅 Eventos</a></li>
             </ul>
         </nav>
     </header>
+
     <main class="container">
-                <section class="intro">
-                    <img src="/images/main-banner1.jpg" alt="Cronologia Gatundo" class="historia-image">
-                        <h1 class="welcome-text"> Bem-vindo ao Mundo de Gatundo</h1>
+        <!-- Hero Section -->
+        <section class="intro">
+            <img src="/images/main-banner1.jpg" alt="Cronologia Gatundo" class="historia-image">
+            <h1 class="welcome-text">Bem-vindo ao Mundo de Gatundo</h1>
             <p class="subtext">Explore a lore, os jogos, personagens e clãs em um universo épico.</p>
-            
         </section>
 
-<main class="container">
-        <!-- Hero História -->
-        <section class="historia-hero">
-                <img src="/images/CatBackground.png" alt="Cronologia Gatundo" class="historia-image">
-        </section>
-
-    
-        <!-- Banner Vermelho -->
+        <!-- Banner Promocional -->
         <section class="banner-red">
             <h2 class="banner-title">🐱 Gatundo é um mundo onde tudo tem alma:</h2>
             <p class="banner-text">📖 Uma página esquecida pode mudar o destino de uma civilização.
 🔮 Um sonho sonhado por um gato pode se tornar um artefato real.
-💫 E até a menor criatura — até mesmo um inseto que canta sozinho no escuro — pode virar o fio que desfaz ou salva o mundo..</p>
+💫 E até a menor criatura pode virar o fio que desfaz ou salva o mundo.</p>
         </section>
 
-        <!-- Vídeo Explicativo Gatundo -->
+        <!-- Vídeo Explicativo -->
         <section class="video-section">
             <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/gVow906gJl4?si=862Rvu1-DBM01doD" title="O que é Gatundo?"></iframe>
+                <iframe src="https://www.youtube.com/embed/gVow906gJl4?si=862Rvu1-DBM01doD" title="O que é Gatundo?" allowfullscreen></iframe>
             </div>
         </section>
 
-        <!-- Cards Interativos -->
+        <!-- Cards Interativos Grid -->
         <section class="cards-grid">
             <div class="card" data-modal="lore">
                 <h3>📜 Seção Lore</h3>
                 <p>Descubra a história ancestral, linhagens felinas e segredos do mundo Gatundo.</p>
             </div>
+            
             <div class="card" data-modal="jogos">
                 <h3>🎲 Jogos</h3>
                 <p>RPG de mesa, board game digital e card battles.</p>
             </div>
+
             <div class="card" data-modal="clans">
                 <h3>🐱 Qual Clã Você Apoia?</h3>
                 <p>Miaulus, Patas Negras? Faça o quiz e descubra seu destino.</p>
             </div>
+
             <div class="card" data-modal="join">
                 <h3>👥 Junte-se ao Bando</h3>
-                <p>Entre na comunidade Discord, WhatsApp e eventos presenciais.</p>
+                <p><a href="https://discord.gg/Js5zCQeX8" class="cta-button">Entre na comunidade Discord</a></p>
+                <p><a href="https://chat.whatsapp.com/EaDA6QWVJ1yLaoNhQoemIz" class="cta-button">Entre na comunidade WhatsApp</a></p>
             </div>
+
             <div class="card" data-modal="solo">
-                <h3>🎯 Teste sua sorte - Aventura Solo Grátis</h3>
+                <h3>🎯 Aventura Solo Grátis</h3>
                 <p>Jogue agora! Aventura interativa sem cadastro. 15min de pura emoção.</p>
             </div>
+
             <div class="card" data-modal="story">
                 <h3>✍️ Compartilhe Sua História</h3>
                 <p>Seu fanfic, arte ou teoria pode virar lore oficial. Poste agora!</p>
             </div>
+
             <div class="card" data-modal="support">
                 <h3>💰 Apoie a Revolução</h3>
                 <p>Catarse, Nuvemshop e merch exclusivo. Seu apoio constrói o futuro!</p>
             </div>
+
             <div class="card" data-modal="tabuleiro">
-                <h3>Batalha de Gatundos Digital</h3>
-                <p>Versão Totalmente interativa do board game. Monte seu clã e bata recordes!</p>
-                <img src="/images/Portal Jogo.png" width="300" height="300 alt="Batalha de Gatundo portal" class="historia-image">
-                <p><a href="#jogos" class="cta-button">Assine</a></p>
-                <a href="#jogos" class="cta-button">Jogue</a>
+                <h3>🎮 Board Game Digital</h3>
+                <p>Versão interativa do jogo de tabuleiro. Monte seu clã e batalhe online!</p>
+                <img src="/images/Portal Jogo.png" alt="Batalha de Gatundo portal" style="max-width: 100%; border-radius: 10px; margin-top: 1rem;">
             </div>
-             <div class="card" data-modal="9vida">
-                <h3>A 9ª Vida</h3>
-                <p>Novidades Felinas vem por aqui</p>
+
+            <div class="card" data-modal="9vida">
+                <h3>🐾 A 9ª Vida</h3>
+                <p>Novidades felinas, atualizações do projeto e conteúdos exclusivos.</p>
             </div>
         </section>
     </main>
 
-    <!-- Modais Pré-informações -->
+    <!-- Modais de Conteúdo -->
     <div id="modal-lore" class="modal-overlay">
         <div class="modal">
             <button class="close-modal" onclick="closeModal('lore')">&times;</button>
@@ -395,11 +367,12 @@
                 <p><strong>Gatundo:</strong> Mundo onde páginas ganham vida, sonhos felinos forjam artefatos e insetos cantores mudam destinos.</p>
                 <ul>
                     <li>🌙 <strong>Era das Sombras:</strong> Gatos descobriram magia nas páginas esquecidas.</li>
-                    <li>⚔️ <strong>Clãs Rivais:</strong> Miaulus (ágil), Patas Negras (resistente), Caramelos (místico).</li>
-                    <li>📖 <strong>Livro Sagrado:</strong> Artefato que narra o passado, presente e futudo de um mundo mágico.</li>
+                    <li>⚔️ <strong>Clãs Rivais:</strong> Miaulus (ágeis), Patas Negras (resistentes), Caramelos (místicos).</li>
+                    <li>📖 <strong>Livro Sagrado:</strong> Artefato que narra o passado, presente e futuro de um mundo mágico.</li>
                 </ul>
-                <a href="pages/lore.html" style="color:#ffd700;">Explorar Completo →</a>
-                <img src="/images/post-img1.jpg" alt="Gatundo" class="historia-image">
+                <img src="/images/post-img1.jpg" alt="Gatundo Lore" class="historia-image">
+                <br>
+                <a href="/Pages/Lore.html" class="cta-button">Explorar Lore Completa →</a>
             </div>
         </div>
     </div>
@@ -409,138 +382,176 @@
             <button class="close-modal" onclick="closeModal('jogos')">&times;</button>
             <h2>🎲 Jogos Gatundo</h2>
             <div class="modal-content">
-                <p>Multiformato: RPG mesa, board game digital, card battles.</p>
+                <p>O ecossistema de jogos abrange múltiplos formatos:</p>
                 <ul>
-                    <li>🃏 <strong>Card Game:</strong> 50+ cartas únicas, batalhas clã vs clã.</li>
-                    <li>🎲 <strong>RPG:</strong> Sistema PbtA adaptado, one-shots 2h.</li>
-                    <li>📱 <strong>Digital:</strong> Solo e Multiplayer beta.</li>
-                    <img src="/images/Cat-Board.png" alt="Gatundo" class="historia-image">
+                    <li>🃏 <strong>Card Game:</strong> 50+ cartas únicas com batalhas táticas entre clãs.</li>
+                    <li>🎲 <strong>RPG de Mesa:</strong> Sistema PbtA adaptado com sessões dinâmicas.</li>
+                    <li>📱 <strong>Digital:</strong> Versões solo e multiplayer em fase beta.</li>
                 </ul>
-                <a href="pages/jogos.html" style="color:#ffd700;">Visite →</a>
+                <img src="/images/Cat-Board.png" alt="Jogos Gatundo" class="historia-image">
+                <br>
+                <a href="/Pages/Jogos.html" class="cta-button">Ver Jogos →</a>
             </div>
         </div>
     </div>
-  <div id="modal-clans" class="modal-overlay">
+
+    <div id="modal-clans" class="modal-overlay">
         <div class="modal">
             <button class="close-modal" onclick="closeModal('clans')">&times;</button>
-            <h2>Clãs de Gatundo</h2>
+            <h2>🐱 Clãs de Gatundo</h2>
             <div class="modal-content">
-                <p>Os reinos de Gatundo.</p>
+                <p>Os grandes reinos e facções que disputam o controle da magia:</p>
                 <ul>
-                    <li>🐈‍⬛ <strong>Miaulus</strong> Felinos Incansaveis.</li>
-                    <li>🐾 <strong>Patas Negras</strong> Caninos Territorialistas Brutais</li>
-                    <li>🐶 <strong>Caramelos</strong> Caninos Diplomaticos.</li>
-                    <img src="/images/Clãs de Gatundo.png" alt="Gatundo" class="historia-image">
+                    <li>🐈‍⬛ <strong>Miaulus:</strong> Felinos incansáveis e mestres do sigilo.</li>
+                    <li>🐾 <strong>Patas Negras:</strong> Guerrilheiros brutais e territorialistas.</li>
+                    <li>🐶 <strong>Caramelos:</strong> Diplomatas natos e guardiões leais.</li>
                 </ul>
-                <a href="pages/Lore.html" style="color:#ffd700;">Visite →</a>
+                <img src="/images/Clãs de Gatundo.png" alt="Clãs de Gatundo" class="historia-image">
+                <br>
+                <a href="/Pages/Lore.html" class="cta-button">Descobrir Seu Clã →</a>
             </div>
         </div>
     </div>
-     <div id="modal-join" class="modal-overlay">
+
+    <div id="modal-join" class="modal-overlay">
         <div class="modal">
             <button class="close-modal" onclick="closeModal('join')">&times;</button>
-            <h2>Faça parte da Comunidade de Gatundo</h2>
+            <h2>👥 Faça Parte da Comunidade</h2>
             <div class="modal-content">
-                <p>Onde a aventura acontece.</p>
+                <p>Conecte-se com outros jogadores e mestres do universo Gatundo:</p>
                 <ul>
-                    <li>🧑‍💻 <strong>Reino do Discord</strong> Campanhas, torneios e batalhas."link"</li>
-                    <li>🎮 <strong>Encontros Presenciais</strong> Campanhas, torneios e batalhas."link"</li>
-                    <li>📲 <strong>Reino Whatsapp</strong> Novidades e promoções unicas.</li>
-                    <img src="/images/Discord.jpg" alt="Gatundo" class="historia-image">
+                    <li>🧑‍💻 <strong>Servidor no Discord:</strong> Campanhas online, bate-papo e artes.</li>
+                    <li>🎮 <strong>Encontros Presenciais:</strong> Torneios e testes de protótipos.</li>
+                    <li>📲 <strong>Grupo WhatsApp:</strong> Promoções exclusivas e avisos de lançamentos.</li>
                 </ul>
-                <a href="pages/Lore.html" style="color:#ffd700;">Visite →</a>
+                <img src="/images/Discord.jpg" alt="Comunidade Gatundo" class="historia-image">
             </div>
         </div>
     </div>
+
     <div id="modal-solo" class="modal-overlay">
         <div class="modal">
             <button class="close-modal" onclick="closeModal('solo')">&times;</button>
-            <h2>Aventura gratis</h2>
+            <h2>🎯 Aventura Solo Grátis</h2>
             <div class="modal-content">
-                <p>A aventura acontece, para você e seu Gato</p>
+                <p>Experimente uma aventura interativa em formato de livro-jogo sem precisar baixar nada.</p>
                 <ul>
-                    <li>📚 <strong>Divirta-se </strong> Faça o download aqui "link"</li>
-                    <img src="/images/image.png" alt="Gatundo" class="historia-image">
-                    </ul>
-                <a href="pages/Lore.html" style="color:#ffd700;">Visite →</a>
+                    <li>📚 Tome decisões rápidas e descubra segredos felinos em 15 minutos.</li>
+                </ul>
+                <img src="/images/image.png" alt="Aventura Solo" class="historia-image">
+                <br>
+                <a href="#" class="cta-button">Iniciar Aventura →</a>
             </div>
         </div>
     </div>
-     <div id="modal-story" class="modal-overlay">
+
+    <div id="modal-story" class="modal-overlay">
         <div class="modal">
             <button class="close-modal" onclick="closeModal('story')">&times;</button>
-            <h2>Conte a sua história</h2>
+            <h2>✍️ Conte Sua História</h2>
             <div class="modal-content">
-                <p>🙋Você gostaria de ter seu Pet eternizado no mundo de Gatundo?😸😸</p>
-                <ul>
-                    <li><strong>Fale Conosco </strong> Clique Aqui "link"</li>
-                    <img src="/images/Encontro.png" alt="Gatundo" class="historia-image">
-                    </ul>
-                <a href="#" style="color:#ffd700;">Visite →</a>
+                <p>Gostaria de ter seu pet eternizado no mundo de Gatundo? Envie sua arte, fanfic ou conceito!</p>
+                <img src="/images/Encontro.png" alt="Envie sua história" class="historia-image">
+                <br>
+                <a href="#" class="cta-button">Enviar Conteúdo →</a>
             </div>
         </div>
     </div>
-     <div id="modal-support" class="modal-overlay">
+
+    <div id="modal-support" class="modal-overlay">
         <div class="modal">
             <button class="close-modal" onclick="closeModal('support')">&times;</button>
-            <h2>Junte-se a nós no Catarse</h2>
+            <h2>💰 Apoie o Projeto no Catarse</h2>
             <div class="modal-content">
-                <p>Seu apoio ajuda o projeto e Ongs de animais</p>
-                <ul>
-                    <li><strong>Fale Conosco </strong> Clique Aqui "link"</li>
-                    <img src="/images/Catarse.png" alt="Gatundo" class="historia-image">
-                    </ul>
-                <a href="#" style="color:#ffd700;">Visite →</a>
+                <p>Seu apoio fortalece o desenvolvimento dos jogos e destina parte dos recursos ao cuidado de ONGs de resgate animal.</p>
+                <img src="/images/Catarse.png" alt="Apoie no Catarse" class="historia-image">
+                <br>
+                <a href="#" class="cta-button" target="_blank">Apoiar Projeto →</a>
             </div>
         </div>
     </div>
-     <div id="modal-tabuleiro" class="modal-overlay">
+
+    <div id="modal-tabuleiro" class="modal-overlay">
         <div class="modal">
             <button class="close-modal" onclick="closeModal('tabuleiro')">&times;</button>
-            <h2>Jogue através da nossa plataforma e vivencie o mundo de GATUNDO!</h2>
+            <h2>🎮 Plataforma Batalha de Gatundos</h2>
             <div class="modal-content">
-                <p>Campanhas, Batalhas e PVP UNICO</p>
+                <p>Acesse nossa plataforma interativa para jogar com amigos online!</p>
                 <ul>
-                    <li><strong>Inscrição Beta </strong> Clique Aqui "link"</li>
-                    <li><strong>Assine aqui </strong> Clique Aqui "link"</li>
-                     <img src="/images/Catplay.png" alt="Gatundo" class="historia-image">
-                    </ul>
-                <a href="http://batalhagatundos.com.br/" style="color:#ffd700;">Visite →</a>
+                    <li>⚔️ Modo Batalha PvP e Campanhas Solo.</li>
+                    <li>🏆 Ranking global e partidas rápidas.</li>
+                </ul>
+                <img src="/images/Catplay.png" alt="Plataforma Digital" class="historia-image">
+                <br>
+                <a href="http://batalhagatundos.com.br/" class="cta-button" target="_blank">Acessar Batalha de Gatundos →</a>
             </div>
         </div>
     </div>
-    <!-- Repita estrutura para outros 7 modais... (jogos, clans, join, solo, story, support, tabuleiro) -->
-    <!-- Para economizar espaço, implemente o padrão acima copiando e alterando IDs/títulos/conteúdos -->
+
+    <div id="modal-9vida" class="modal-overlay">
+        <div class="modal">
+            <button class="close-modal" onclick="closeModal('9vida')">&times;</button>
+            <h2>🐾 A 9ª Vida</h2>
+            <div class="modal-content">
+                <p>Fique por dentro do nosso blog com novidades, contos extras e os bastidores de criação do projeto.</p>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Abrir Modal
+        // Abrir Modal de forma segura
         document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('click', () => {
                 const modalId = card.dataset.modal;
-                document.getElementById(`modal-${modalId}`).style.display = 'flex';
-                document.body.style.overflow = 'hidden';
+                const targetModal = document.getElementById(`modal-${modalId}`);
+                if (targetModal) {
+                    targetModal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                }
             });
         });
 
         // Fechar Modal
         window.closeModal = function(modalId) {
-            document.getElementById(`modal-${modalId}`).style.display = 'none';
-            document.body.style.overflow = 'auto';
+            const targetModal = document.getElementById(`modal-${modalId}`);
+            if (targetModal) {
+                targetModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
         };
 
-        // Fechar clicando fora
+        // Fechar clicando fora do modal (Overlay)
         document.querySelectorAll('.modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', (e) => {
-                if (e.target.classList.contains('modal-overlay')) closeModal(overlay.id.split('-')[1]);
+                if (e.target.classList.contains('modal-overlay')) {
+                    closeModal(overlay.id.replace('modal-', ''));
+                }
             });
         });
 
-        // Scroll suave para seções
+        // Fechar com a tecla ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                    overlay.style.display = 'none';
+                });
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Scroll suave para ancoras internas
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
             });
         });
     </script>
-    </html>
+</body>
+</html>
